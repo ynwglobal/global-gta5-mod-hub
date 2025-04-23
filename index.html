@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GLOBAL Mod Menu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" href="./favicon.png" type="image/png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -16,15 +20,6 @@
         background-color: #181821;
         color: #fafafa;
         line-height: 1.6;
-      }
-      body::before {
-        content: '';
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, #00bfff22, transparent);
-        z-index: -1;
-        filter: blur(60px);
       }
       header {
         padding: 1rem 2rem;
@@ -44,15 +39,14 @@
         text-align: center;
         padding: 5rem 1rem;
       }
+      .hero img {
+        max-width: 200px;
+        margin-bottom: 2rem;
+      }
       .hero h1 {
         font-size: 2.5rem;
         color: #00bfff;
         margin-bottom: 1rem;
-        animation: glow 2s ease-in-out infinite;
-      }
-      @keyframes glow {
-        0%, 100% { text-shadow: 0 0 10px #00bfff; }
-        50% { text-shadow: 0 0 20px #00bfff; }
       }
       .hero p {
         max-width: 600px;
@@ -75,12 +69,11 @@
         gap: 2rem;
         margin-top: 2rem;
         color: #ddd;
-        font-size: 1.2rem;
+        flex-wrap: wrap;
       }
-      .counter {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #00bfff;
+      .stats div {
+        font-size: 1.2rem;
+        text-align: center;
       }
       .about {
         padding: 4rem 2rem;
@@ -114,21 +107,27 @@
     </header>
 
     <section class="hero">
+      <img src="./favicon.png" alt="GLOBAL Logo">
       <h1>Top Quality Cheats</h1>
-      <p>GLOBAL has one goal: provide the most elite GTA V modding experience. Stable, fast, and built for domination. Created by YNWGLOBAL.</p>
+      <p>
+        GLOBAL has one goal: provide the most elite GTA V modding experience. Stable, fast, and built for domination. Created by YNWGLOBAL.
+      </p>
       <a class="btn" href="https://discord.gg/9MsnJ4dQZC" target="_blank">Join Discord</a>
       <a class="btn" href="#">Get Started</a>
 
       <div class="stats">
-        <div><span class="counter" data-target="65">0</span><br />Users Online</div>
-        <div><span class="counter" data-target="2">0</span><br />Cheats</div>
-        <div><span class="counter" data-target="43">0</span><br />Resellers</div>
+        <div><strong>0</strong><br />Users Online</div>
+        <div><strong>0</strong><br />Cheats</div>
+        <div><strong>0</strong><br />Resellers</div>
+        <div><em>In Development</em></div>
       </div>
     </section>
 
     <section class="about">
       <h2>About GLOBAL</h2>
-      <p>GLOBAL is a new force in the modding world. Built from the ground up with power, performance, and simplicity in mind. Originally private in early 2025, now GLOBAL is unleashing next-gen features.</p>
+      <p>
+        GLOBAL is a new force in the modding world. Built from the ground up with power, performance, and simplicity in mind. Originally private in early 2025, now GLOBAL is unleashing next-gen features.
+      </p>
       <br />
       <p><strong>Carefully Crafted</strong><br />Every line of code is tuned for flawless results and seamless use.</p>
       <p><strong>Unique Options</strong><br />Innovative tools that keep things exciting and fresh every time.</p>
@@ -139,24 +138,5 @@
     <footer>
       &copy; 2025 GLOBAL by YNWGLOBAL. Built for domination. All rights reserved.
     </footer>
-
-    <script>
-      const counters = document.querySelectorAll('.counter');
-      counters.forEach(counter => {
-        counter.innerText = '0';
-        const updateCount = () => {
-          const target = +counter.getAttribute('data-target');
-          const count = +counter.innerText;
-          const increment = target / 60;
-          if (count < target) {
-            counter.innerText = Math.ceil(count + increment);
-            setTimeout(updateCount, 30);
-          } else {
-            counter.innerText = target;
-          }
-        };
-        updateCount();
-      });
-    </script>
   </body>
 </html>
