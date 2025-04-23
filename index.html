@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLOBAL Mod Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0f0f13;
+      color: #dcdcdc;
+    }
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: #14141a;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      color: #3ebeff;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #aaa;
+      max-width: 600px;
+      margin: auto;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 30px 10px;
+      background: #18181f;
+    }
+    .stat {
+      background: #1e1e26;
+      padding: 20px;
+      border-radius: 10px;
+      width: 140px;
+      text-align: center;
+    }
+    .stat h2 {
+      color: #3ebeff;
+      font-size: 2rem;
+      margin: 0;
+    }
+    .stat p {
+      color: #ccc;
+      margin-top: 5px;
+      font-size: 0.9rem;
+    }
+    .section {
+      padding: 50px 20px;
+      background: #14141a;
+    }
+    .section h2 {
+      color: #3ebeff;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .section p {
+      color: #aaa;
+      font-size: 1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    .features {
+      padding: 30px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      background: #18181f;
+    }
+    .feature-box {
+      background: #1e1e26;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .feature-box h3 {
+      color: #3ebeff;
+      margin: 0 0 10px;
+    }
+    .feature-box p {
+      color: #ccc;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #555;
+      font-size: 0.85rem;
+      background: #121217;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>GLOBAL – Built to Dominate</h1>
+    <p>From protection to precision, GLOBAL is crafted for elite modders who demand performance, stability, and unmatched design. Welcome to your new favorite menu.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <h2 id="users">0</h2>
+      <p>Users Online</p>
+    </div>
+    <div class="stat">
+      <h2 id="cheats">0</h2>
+      <p>Cheats</p>
+    </div>
+    <div class="stat">
+      <h2 id="resellers">0</h2>
+      <p>Resellers</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>About GLOBAL</h2>
+    <p>GLOBAL is a rising force in the GTA modding community. Founded with a commitment to quality and innovation, we deliver features that enhance gameplay, ensure stability, and provide advanced protections — all under a unified, GLOBAL experience.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature-box">
+      <h3>💙 Carefully Crafted</h3>
+      <p>Every detail is engineered to deliver precision, performance, and beauty.</p>
+    </div>
+    <div class="feature-box">
+      <h3>💎 Unique Options</h3>
+      <p>From advanced protections to stunning UIs, we redefine what a menu can be.</p>
+    </div>
+    <div class="feature-box">
+      <h3>🔄 Ever Evolving</h3>
+      <p>Frequent updates and support keep you ahead of every threat and patch.</p>
+    </div>
+    <div class="feature-box">
+      <h3>🎨 Customization</h3>
+      <p>Tweak visuals, hotkeys, and behaviors until the GLOBAL experience is 100% yours.</p>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 GLOBAL by YNWGLOBAL — All Rights Reserved.
+  </footer>
+
+  <script>
+    function animateValue(id, start, end, duration) {
+      let current = start;
+      const range = end - start;
+      const increment = end > start ? 1 : -1;
+      const stepTime = Math.abs(Math.floor(duration / range));
+      const obj = document.getElementById(id);
+      const timer = setInterval(function () {
+        current += increment;
+        obj.textContent = current;
+        if (current === end) clearInterval(timer);
+      }, stepTime);
+    }
+    animateValue("users", 0, 65, 1500);
+    animateValue("cheats", 0, 2, 1000);
+    animateValue("resellers", 0, 43, 1200);
+  </script>
+</body>
+</html>
