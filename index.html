@@ -19,6 +19,7 @@
       color: #fafafa;
       line-height: 1.6;
       padding: 0 1rem;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .container {
@@ -39,12 +40,63 @@
       align-items: center;
     }
 
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
     nav a {
       color: #ffffff;
-      margin: 0 1rem;
       text-decoration: none;
       font-weight: 500;
       cursor: pointer;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #444;
+      transition: 0.4s;
+      border-radius: 30px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #00bfff;
+      transition: 0.4s;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00bfff;
+    }
+
+    input:checked + .slider {
+      background-color: #222;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
     }
 
     .hero {
@@ -117,9 +169,10 @@
     }
 
     @media (max-width: 600px) {
-      nav a {
-        display: inline-block;
-        margin: 0.5rem 0.5rem;
+      nav {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
       }
     }
   </style>
@@ -138,6 +191,10 @@
         <a onclick="showCheats()">Cheats</a>
         <a href="#" style="opacity: 0.6;">Store (In Development)</a>
         <a href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
+        <label class="switch">
+          <input type="checkbox" disabled />
+          <span class="slider"></span>
+        </label>
       </nav>
     </div>
   </header>
@@ -154,7 +211,7 @@
     <h2>Cheats</h2>
     <div class="cheat-item">GTA V<br><strong>🛠 In Development</strong> — Full GLOBAL Mod Menu</div>
     <div class="cheat-item">Warzone<br><strong>🛠 In Development</strong> — GLOBAL Exploit Console</div>
-    <div class="cheat-item">Fortnite<br><strong>🛠 In Development</strong> — Developer Console (Dev Tool)</div>
+    <div class="cheat-item">Fortnite<br><strong>✅ Working & Undetected</strong> — Fortnite Tool</div>
     <div class="cheat-item">RDR2 / Others<br><strong>🛠 In Development</strong> — To be confirmed</div>
   </section>
 
