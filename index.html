@@ -8,193 +8,138 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
       font-family: 'Inter', sans-serif;
     }
-
     body {
-      background-color: #181821;
-      color: #fafafa;
-      line-height: 1.6;
+      background-color: #0f0f17;
+      color: #f0f0f0;
       padding: 0 1rem;
-      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
     }
-
     .container {
       max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 1rem;
+      margin: auto;
+      padding: 2rem 1rem;
     }
-
     header {
-      background: #10101a;
-      border-bottom: 1px solid #333;
+      background-color: #10101a;
       padding: 1rem 0;
+      border-bottom: 1px solid #222;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
-
     header .container {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
+    header strong {
+      font-size: 1.8rem;
+      color: #00bfff;
+      text-shadow: 0 0 10px #00bfff;
+    }
     nav {
       display: flex;
-      align-items: center;
       gap: 1rem;
+      align-items: center;
     }
-
     nav a {
-      color: #ffffff;
+      color: #ccc;
       text-decoration: none;
       font-weight: 500;
-      cursor: pointer;
+      transition: color 0.3s ease;
     }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 26px;
+    nav a:hover {
+      color: #00bfff;
     }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #444;
-      transition: 0.4s;
-      border-radius: 30px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 20px;
-      width: 20px;
-      left: 3px;
-      bottom: 3px;
-      background-color: #00bfff;
-      transition: 0.4s;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #00bfff;
-    }
-
-    input:checked + .slider {
-      background-color: #222;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(24px);
-    }
-
     .hero {
       text-align: center;
-      padding: 5rem 0;
+      padding: 5rem 1rem 3rem;
+      animation: fadeIn 1s ease forwards;
     }
-
     .hero img {
-      max-width: 200px;
+      width: 160px;
+      filter: drop-shadow(0 0 8px #00bfff);
       margin-bottom: 2rem;
     }
-
     .hero h1 {
-      font-size: 2.5rem;
       color: #00bfff;
+      font-size: 2.7rem;
       margin-bottom: 1rem;
     }
-
     .hero p {
       max-width: 600px;
-      margin: 0 auto 2rem;
+      margin: auto;
       color: #aaa;
     }
-
     .btn {
       display: inline-block;
       padding: 0.75rem 1.5rem;
+      margin: 1rem 0.5rem;
       background-color: #00bfff;
       color: white;
-      border-radius: 0.5rem;
       text-decoration: none;
+      border-radius: 0.5rem;
       font-weight: bold;
-      margin: 0.5rem;
+      box-shadow: 0 0 10px #00bfff;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00bfff;
+    }
     .cheats-section {
       display: none;
-      padding: 3rem 0;
+      animation: fadeIn 1s ease forwards;
     }
-
-    .cheats-section h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: #00bfff;
+    .cheats-section.active {
+      display: block;
     }
-
     .cheat-item {
-      background: #20202b;
-      margin: 1rem 0;
+      background: #1c1c2b;
       padding: 1rem;
-      border-radius: 0.5rem;
-      border-left: 5px solid #00bfff;
+      margin: 1rem 0;
+      border-left: 4px solid #00bfff;
+      border-radius: 8px;
     }
-
     .about {
-      padding: 4rem 0;
       text-align: center;
+      margin-top: 4rem;
+      color: #ccc;
     }
-
-    .about p {
-      max-width: 700px;
-      margin: 1rem auto;
+    .about h2 {
+      color: #00bfff;
+      margin-bottom: 1rem;
     }
-
     footer {
       text-align: center;
-      padding: 2rem 1rem;
-      color: #777;
+      color: #555;
+      padding: 2rem 0;
       font-size: 0.9rem;
     }
-
-    @media (max-width: 600px) {
-      nav {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        justify-content: center;
-      }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   </style>
   <script>
     function showCheats() {
-      document.querySelector('.cheats-section').style.display = 'block';
+      const cheats = document.querySelector('.cheats-section');
+      cheats.classList.toggle('active');
     }
   </script>
 </head>
 <body>
   <header>
     <div class="container">
-      <div><strong>GLOBAL</strong></div>
+      <strong>GLOBAL</strong>
       <nav>
         <a onclick="location.reload()">Home</a>
         <a onclick="showCheats()">Cheats</a>
-        <a href="#" style="opacity: 0.6;">Store (In Development)</a>
+        <a href="#" style="opacity: 0.6;">Store (Coming Soon)</a>
         <a href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
-        <label class="switch">
-          <input type="checkbox" disabled />
-          <span class="slider"></span>
-        </label>
       </nav>
     </div>
   </header>
@@ -202,31 +147,27 @@
   <section class="hero container">
     <img src="global_logo.png" alt="GLOBAL Logo" />
     <h1>Next-Gen Game Enhancements</h1>
-    <p>GLOBAL is built for elite modding. Cutting-edge, stealthy, and user-friendly. We are currently developing the full GLOBAL Mod Menu system with professional grade protections and features.</p>
+    <p>GLOBAL is built for elite modding. Stealthy. Powerful. Custom. Join the new era of domination.</p>
     <a class="btn" href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
     <a class="btn" href="#" onclick="showCheats()">Get Started</a>
   </section>
 
   <section class="cheats-section container">
     <h2>Cheats</h2>
-    <div class="cheat-item">GTA V<br><strong>🛠 In Development</strong> — Full GLOBAL Mod Menu</div>
-    <div class="cheat-item">Warzone<br><strong>🛠 In Development</strong> — GLOBAL Exploit Console</div>
-    <div class="cheat-item">Fortnite<br><strong>✅ Working & Undetected</strong> — Fortnite Tool</div>
-    <div class="cheat-item">RDR2 / Others<br><strong>🛠 In Development</strong> — To be confirmed</div>
+    <div class="cheat-item">GTA V — <strong>🛠 In Development</strong> — Full GLOBAL Mod Menu</div>
+    <div class="cheat-item">Warzone — <strong>🛠 In Development</strong> — GLOBAL Exploit Console</div>
+    <div class="cheat-item">Fortnite — <strong>✅ Working</strong> — GLOBAL Fortnite Tool</div>
+    <div class="cheat-item">RDR2 / Others — <strong>🛠 Coming Soon</strong></div>
   </section>
 
   <section class="about container">
     <h2>About GLOBAL</h2>
-    <p>GLOBAL is the new wave in modding, offering stealth, power, and precision. Once private, now going public in 2025 with a vision for domination.</p>
-    <br />
-    <p><strong>Carefully Crafted</strong><br />Every feature is optimized for security, speed, and stealth.</p>
-    <p><strong>Innovative</strong><br />Unique tools that set you apart from the rest.</p>
-    <p><strong>Constantly Improving</strong><br />Features and protection always evolving.</p>
-    <p><strong>Visual Customization</strong><br />Tailor the UI with full theme support and layout control.</p>
+    <p>GLOBAL is the future of modding. Engineered for precision, performance, and power. Once private — now public.</p>
+    <p><strong>High Performance</strong> • <strong>Secure</strong> • <strong>Visual Customization</strong></p>
   </section>
 
   <footer>
-    &copy; 2025 GLOBAL by YNWGLOBAL. Built for domination. All rights reserved.
+    &copy; 2025 GLOBAL by YNWGLOBAL. Built for domination.
   </footer>
 </body>
 </html>
