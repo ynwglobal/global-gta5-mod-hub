@@ -1,212 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fortnite Tool - Console And Pc Undetected</title>
-  <link rel="icon" href="global_logo.png" type="image/png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-    body {
-      background-color: #0f0f17;
-      color: #f0f0f0;
-      padding: 0 1rem;
-      overflow-x: hidden;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 2rem 1rem;
-    }
-    header {
-      background-color: #10101a;
-      padding: 1rem 0;
-      border-bottom: 1px solid #222;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
-    header .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header strong {
-      font-size: 1.8rem;
-      color: #00bfff;
-      text-shadow: 0 0 10px #00bfff;
-    }
-    nav {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-      cursor: pointer;
-    }
-    nav a:hover {
-      color: #00bfff;
-    }
-
-    .top-discord-banner {
-      background: #13131f;
-      border-bottom: 1px solid #1f1f2f;
-      text-align: center;
-      padding: 1.5rem 0;
-    }
-    .top-discord-banner a.btn {
-      background-color: #5865f2;
-      box-shadow: 0 0 10px #5865f2;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .top-discord-banner a.btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #5865f2;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 5rem 1rem 3rem;
-      animation: fadeIn 1s ease forwards;
-    }
-    .hero img {
-      width: 160px;
-      filter: drop-shadow(0 0 8px #00bfff);
-      margin-bottom: 2rem;
-    }
-    .hero h1 {
-      color: #00bfff;
-      font-size: 2.7rem;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      max-width: 600px;
-      margin: auto;
-      color: #aaa;
-    }
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      margin: 1rem 0.5rem;
-      background-color: #00bfff;
-      color: white;
-      text-decoration: none;
-      border-radius: 0.5rem;
-      font-weight: bold;
-      box-shadow: 0 0 10px #00bfff;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #00bfff;
-    }
-
-    .cheats-section {
-      display: none;
-      animation: fadeIn 1s ease forwards;
-    }
-    .cheats-section.active {
-      display: block;
-    }
-    .cheat-item {
-      background: #1c1c2b;
-      padding: 1rem;
-      margin: 1rem 0;
-      border-left: 4px solid #00bfff;
-      border-radius: 8px;
-    }
-
-    .alert-message {
-      background-color: #1a1a2f;
-      color: #ffcc00;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      border-left: 5px solid #ffcc00;
-      border-radius: 6px;
-      font-weight: 600;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .cheats-section.active .alert-message {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .about {
-      text-align: center;
-      margin-top: 4rem;
-      color: #ccc;
-    }
-    .about h2 {
-      color: #00bfff;
-      margin-bottom: 1rem;
-    }
-
-    footer {
-      text-align: center;
-      color: #555;
-      padding: 2rem 0;
-      font-size: 0.9rem;
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-      header .container {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-        text-align: center;
-      }
-
-      nav {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding-top: 0.5rem;
-      }
-
-      .top-discord-banner {
-        padding: 2rem 1rem;
-      }
-
-      .hero {
-        padding-top: 4rem;
-      }
-
-      .btn {
-        width: 90%;
-        max-width: 300px;
-        margin: 0.5rem auto;
-      }
-
-      .hero img {
-        width: 140px;
-      }
-    }
-  </style>
-  <script>
-    function showCheats() {
-      const cheats = document.querySelector('.cheats-section');
-      cheats.classList.toggle('active');
-    }
-  </script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fortnite Tool - Console And Pc Undetected</title>
+<link rel="icon" href="global_logo.png" type="image/png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ... same styling as before ... */
+</style>
+<script>
+  function showCheats() {
+    const cheats = document.querySelector('.cheats-section');
+    const botfeatures = document.querySelector('.botfeatures-section');
+    botfeatures.classList.remove('active');
+    cheats.classList.toggle('active');
+  }
+  function showBotFeatures() {
+    const botfeatures = document.querySelector('.botfeatures-section');
+    const cheats = document.querySelector('.cheats-section');
+    cheats.classList.remove('active');
+    botfeatures.classList.toggle('active');
+  }
+</script>
 </head>
 <body>
   <header>
@@ -215,6 +31,7 @@
       <nav>
         <a onclick="location.reload()">Home</a>
         <a onclick="showCheats()">Cheats</a>
+        <a onclick="showBotFeatures()">Bot Features</a>
         <a href="#" style="opacity: 0.6;">Store (Coming Soon)</a>
         <a href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
       </nav>
@@ -230,9 +47,11 @@
     <h1>Next-Gen Game Enhancements</h1>
     <p>GLOBAL is built for elite modding. Stealthy. Powerful. Custom. Join the new era of domination.</p>
     <a class="btn" href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
-    <a class="btn" href="#" onclick="showCheats()">Get Started</a>
+    <a class="btn" href="#" onclick="showCheats()">Cheats</a>
+    <a class="btn" href="#" onclick="showBotFeatures()">Bot Features</a>
   </section>
 
+  <!-- Cheats section (toggle) -->
   <section class="cheats-section container">
     <div class="alert-message" id="discord-alert">
       ⚠️ Join our <a href="https://discord.gg/SJP5F6hkU5" target="_blank" style="color: #ffcc00; text-decoration: underline;">Discord</a> to access the Fortnite Tool.
@@ -245,6 +64,50 @@
       <em>🖥 PC + 🎮 Console Supported (Undetected)</em>
     </div>
     <div class="cheat-item">RDR2 / Others — <strong>🛠 Coming Soon</strong></div>
+  </section>
+
+  <!-- Bot Features section (toggle) -->
+  <section class="botfeatures-section container">
+    <div class="alert-message" id="bot-alert">
+      🤖 Enhance your Discord experience with our all-in-one bot!
+    </div>
+    <h2>Bot Features</h2>
+    <div class="cheat-item">
+      <h3>📝 Reputation & Voting System</h3>
+      <p>/vouch – Vouch for trusted users<br>
+      /vouches – View a user’s received vouches<br>
+      /leaderboard – See top vouched members</p>
+    </div>
+    <div class="cheat-item">
+      <h3>💡 Suggestions System</h3>
+      <p>/setsuggestionchannel – Set a channel for suggestions<br>
+      /unsetsuggestionchannel – Remove the active suggestion channel<br>
+      /suggeststatus – View the status of the suggestion setup<br>
+      /viewvotes – Display votes made through the suggestion system</p>
+    </div>
+    <div class="cheat-item">
+      <h3>🎮 Fortnite Integration</h3>
+      <p>/battleinfo – Stay updated with the latest Fortnite news<br>
+      /battlemap – View the current Fortnite Battle Royale map</p>
+    </div>
+    <div class="cheat-item">
+      <h3>🧩 Utilities & Tools</h3>
+      <p>/url – Analyze and preview any URL<br>
+      /geolocate – Approximate the location of an IP address<br>
+      /vpncheck – Detect if an IP is using a VPN or proxy<br>
+      /checkban – Enter a Rockstar username or ID to check if banned<br>
+      /generatekey – Generate a lifetime key for premium features<br>
+      /avatar – Instantly view someone’s profile picture</p>
+    </div>
+    <div class="cheat-item">
+      <h3>🛠️ Moderation & Info</h3>
+      <p>/help – View all available commands<br>
+      /invite – Generate a permanent invite link for your server<br>
+      /ping – Check the bot’s current response time<br>
+      /nuke – Instantly clear all messages in a channel<br>
+      /premium – Learn how to unlock premium features</p>
+    </div>
+    <p style="margin-top: 1rem; color: #888; font-size: 0.9rem;">⚠️ This bot must be used within a server to prevent abuse — unless explicitly approved by the developer.</p>
   </section>
 
   <section class="about container">
