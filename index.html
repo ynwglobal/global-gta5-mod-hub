@@ -108,6 +108,7 @@
       font-weight: bold;
       box-shadow: 0 0 10px #00bfff;
       transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
     }
     .btn:hover {
       transform: scale(1.05);
@@ -179,6 +180,71 @@
       font-size: 0.9rem;
     }
 
+    /* Bot Features Section */
+    .bot-section {
+      background: #121223;
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 3rem auto;
+      max-width: 1000px;
+      box-shadow: 0 0 15px #00bfff88;
+      color: #cceeff;
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+    .bot-section h2 {
+      color: #00d9ff;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      text-shadow: 0 0 10px #00d9ff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .bot-section ul {
+      list-style: none;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .bot-section ul li {
+      margin-bottom: 0.6rem;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .bot-section ul li::before {
+      content: "🔹";
+      position: absolute;
+      left: 0;
+      color: #00bfff;
+    }
+    .bot-section code {
+      background: #0a1a2f;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      color: #00e5ff;
+      font-weight: 600;
+    }
+
+    /* Bot toggle button styling */
+    #toggleBotBtn {
+      display: block;
+      margin: 2rem auto 0 auto;
+      background-color: #00bfff;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.6rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00bfffaa;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    #toggleBotBtn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00bfff;
+    }
+
     @keyframes fadeIn {
       0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -211,33 +277,27 @@
         width: 140px;
       }
     }
-
-    /* Additional filler styles to push line count */
-    .faq {
-      margin: 3rem 0;
-      background: #1a1a2f;
-      border-radius: 8px;
-      padding: 1rem;
-    }
-    .faq h3 {
-      color: #00bfff;
-      margin-bottom: 1rem;
-    }
-    .faq p {
-      color: #aaa;
-      margin-bottom: 0.5rem;
-      line-height: 1.5;
-    }
-    .faq .question {
-      font-weight: bold;
-      color: #00bfff;
-      margin-top: 1rem;
-    }
   </style>
   <script>
     function showCheats() {
       const cheats = document.querySelector('.cheats-section');
       cheats.classList.toggle('active');
+    }
+    function toggleBotFeatures() {
+      const botSection = document.querySelector('.bot-section');
+      botSection.classList.toggle('active');
+      if (botSection.classList.contains('active')) {
+        botSection.style.display = 'block';
+        document.getElementById('toggleBotBtn').textContent = '🚀 Hide Bot Features';
+      } else {
+        botSection.style.display = 'none';
+        document.getElementById('toggleBotBtn').textContent = '🤖 Show Bot Features';
+      }
+    }
+    window.onload = () => {
+      // Initially hide the bot features section
+      document.querySelector('.bot-section').style.display = 'none';
+      document.getElementById('toggleBotBtn').textContent = '🤖 Show Bot Features';
     }
   </script>
 </head>
@@ -264,6 +324,60 @@
     <p>GLOBAL is built for elite modding. Stealthy. Powerful. Custom. Join the new era of domination.</p>
     <a class="btn" href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
     <a class="btn" href="#" onclick="showCheats()">Get Started</a>
+
+    <!-- Bot features toggle button -->
+    <button id="toggleBotBtn" onclick="toggleBotFeatures()">🤖 Show Bot Features</button>
+  </section>
+
+  <section class="bot-section container">
+    <h2>🤖 Bot Features Overview</h2>
+    <p>
+      Boost your server with a powerful, all-in-one Discord bot packed with community tools, Fortnite integration, moderation utilities, and smart security features — all wrapped in a sleek, reliable system.
+    </p>
+
+    <h3>📝 Reputation & Voting System</h3>
+    <ul>
+      <li><code>/vouch</code> – Vouch for trusted users</li>
+      <li><code>/vouches</code> – View a user’s received vouches</li>
+      <li><code>/leaderboard</code> – See the top vouched members</li>
+    </ul>
+
+    <h3>💡 Suggestions System</h3>
+    <ul>
+      <li><code>/setsuggestionchannel</code> – Set the channel for suggestions</li>
+      <li><code>/unsetsuggestionchannel</code> – Remove the active suggestion channel</li>
+      <li><code>/suggeststatus</code> – View the current suggestion setup status</li>
+      <li><code>/viewvotes</code> – Display votes made through the suggestion system</li>
+    </ul>
+
+    <h3>🎮 Fortnite Integration</h3>
+    <ul>
+      <li><code>/battleinfo</code> – Get the latest Fortnite news</li>
+      <li><code>/battlemap</code> – View the current Fortnite Battle Royale map</li>
+    </ul>
+
+    <h3>🧩 Utilities & Tools</h3>
+    <ul>
+      <li><code>/url</code> – Analyze and preview any URL</li>
+      <li><code>/geolocate</code> – Approximate the location of an IP address</li>
+      <li><code>/vpncheck</code> – Detect if an IP is using a VPN or proxy</li>
+      <li><code>/checkban</code> – Check if a Rockstar username or ID is banned by Battleye</li>
+      <li><code>/generatekey</code> – Generate a lifetime key for premium features</li>
+      <li><code>/avatar</code> – View someone’s profile picture instantly</li>
+    </ul>
+
+    <h3>🛠️ Moderation & Info</h3>
+    <ul>
+      <li><code>/help</code> – View all available commands</li>
+      <li><code>/invite</code> – Generate a permanent invite link for your server</li>
+      <li><code>/ping</code> – Check the bot’s current response time</li>
+      <li><code>/nuke</code> – Clear all messages in a channel instantly</li>
+      <li><code>/premium</code> – Learn how to unlock premium features</li>
+    </ul>
+
+    <p style="color:#ffcc00; font-weight: 600; margin-top:1rem;">
+      ⚠️ <strong>Note:</strong> This bot must be used within a server to prevent abuse — unless explicitly approved by the developer.
+    </p>
   </section>
 
   <section class="cheats-section container">
