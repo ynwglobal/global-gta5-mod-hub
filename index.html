@@ -11,252 +11,484 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/ynwglobal/global-gta5-mod-hub/main/global_logo.png" />
 <meta name="twitter:image" content="https://raw.githubusercontent.com/ynwglobal/global-gta5-mod-hub/main/global_logo.png" />
 
-<!-- Open Graph and Twitter meta tags for embed preview -->
+<!-- ADDED: Open Graph and Twitter meta tags for embed preview -->
 <meta property="og:title" content="GLOBAL is the future of modding." />
 <meta property="og:description" content="Engineered for precision, performance, and power. Once private — now public." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://ynwglobal.github.io/global-gta5-mod-hub/" />
+<meta property="og:url" content="https://ynwglobal.github.io/testsite/" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="GLOBAL is the future of modding." />
 <meta name="twitter:description" content="Engineered for precision, performance, and power. Once private — now public." />
-<meta name="twitter:url" content="https://ynwglobal.github.io/global-gta5-mod-hub/" />
+<meta name="twitter:url" content="https://ynwglobal.github.io/testsite/" />
 
 <style>
 /* Your existing styles here */
 * {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 body {
-background-color: #0f0f17;
-color: #f0f0f0;
-padding: 0 1rem;
-overflow-x: hidden;
+  background-color: #0f0f17;
+  color: #f0f0f0;
+  padding: 0 1rem;
+  overflow-x: hidden;
 }
 .container {
-max-width: 1000px;
-margin: auto;
-padding: 2rem 1rem;
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem 1rem;
 }
 header {
-background-color: #10101a;
-padding: 1rem 0;
-border-bottom: 1px solid #222;
-box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  background-color: #10101a;
+  padding: 1rem 0;
+  border-bottom: 1px solid #222;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 header .container {
-display: flex;
-justify-content: space-between;
-align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 header strong {
-font-size: 1.8rem;
-color: #00bfff;
-text-shadow: 0 0 10px #00bfff;
+  font-size: 1.8rem;
+  color: #00bfff;
+  text-shadow: 0 0 10px #00bfff;
 }
 nav {
-display: flex;
-gap: 1rem;
-align-items: center;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 nav a {
-color: #ccc;
-text-decoration: none;
-font-weight: 500;
-transition: color 0.3s ease;
-cursor: pointer;
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  cursor: pointer;
 }
 nav a:hover {
-color: #00bfff;
+  color: #00bfff;
 }
 
 .top-discord-banner {
-background: #13131f;
-border-bottom: 1px solid #1f1f2f;
-text-align: center;
-padding: 1.5rem 0;
+  background: #13131f;
+  border-bottom: 1px solid #1f1f2f;
+  text-align: center;
+  padding: 1.5rem 0;
 }
 .top-discord-banner a.btn {
-background-color: #5865f2;
-box-shadow: 0 0 10px #5865f2;
-color: white;
-text-decoration: none;
-font-weight: bold;
-border-radius: 0.5rem;
-padding: 0.75rem 1.5rem;
-transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #5865f2;
+  box-shadow: 0 0 10px #5865f2;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .top-discord-banner a.btn:hover {
-transform: scale(1.05);
-box-shadow: 0 0 20px #5865f2;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #5865f2;
 }
 
 .hero {
-text-align: center;
-padding: 5rem 1rem 3rem;
-animation: fadeIn 1s ease forwards;
+  text-align: center;
+  padding: 5rem 1rem 3rem;
+  animation: fadeIn 1s ease forwards;
 }
 .hero img {
-width: 160px;
-filter: drop-shadow(0 0 8px #00bfff);
-margin-bottom: 2rem;
+  width: 160px;
+  filter: drop-shadow(0 0 8px #00bfff);
+  margin-bottom: 2rem;
 }
 .hero h1 {
-color: #00bfff;
-font-size: 2.7rem;
-margin-bottom: 1rem;
+  color: #00bfff;
+  font-size: 2.7rem;
+  margin-bottom: 1rem;
 }
 .hero p {
-max-width: 600px;
-margin: auto;
-color: #aaa;
+  max-width: 600px;
+  margin: auto;
+  color: #aaa;
 }
 .btn {
-display: inline-block;
-padding: 0.75rem 1.5rem;
-margin: 1rem 0.5rem;
-background-color: #00bfff;
-color: white;
-text-decoration: none;
-border-radius: 0.5rem;
-font-weight: bold;
-box-shadow: 0 0 10px #00bfff;
-transition: transform 0.2s, box-shadow 0.2s;
-cursor: pointer;
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  margin: 1rem 0.5rem;
+  background-color: #00bfff;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00bfff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 .btn:hover {
-transform: scale(1.05);
-box-shadow: 0 0 20px #00bfff;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00bfff;
 }
 
 .cheats-section {
-display: none;
-animation: fadeIn 1s ease forwards;
+  display: none;
+  animation: fadeIn 1s ease forwards;
 }
 .cheats-section.active {
-display: block;
+  display: block;
 }
 .cheat-item {
-background: #1c1c2b;
-padding: 1rem;
-margin: 1rem 0;
-border-left: 4px solid #00bfff;
-border-radius: 8px;
+  background: #1c1c2b;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-left: 4px solid #00bfff;
+  border-radius: 8px;
 }
 .cheat-item span {
-display: block;
-font-size: 0.9rem;
-color: #888;
-margin-top: 0.2rem;
+  display: block;
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 0.2rem;
 }
 
 .alert-message {
-background-color: #1a1a2f;
-color: #ffcc00;
-padding: 1rem;
-margin-bottom: 1.5rem;
-border-left: 5px solid #ffcc00;
-border-radius: 6px;
-font-weight: 600;
-opacity: 0;
-transform: translateY(-10px);
-transition: opacity 0.6s ease, transform 0.6s ease;
+  background-color: #1a1a2f;
+  color: #ffcc00;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid #ffcc00;
+  border-radius: 6px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .cheats-section.active .alert-message {
-opacity: 1;
-transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .about {
-text-align: center;
-margin-top: 4rem;
-color: #ccc;
+  text-align: center;
+  margin-top: 4rem;
+  color: #ccc;
 }
 .about h2 {
-color: #00bfff;
-margin-bottom: 1rem;
+  color: #00bfff;
+  margin-bottom: 1rem;
 }
 .about ul {
-list-style: none;
-margin: 1rem 0;
-padding: 0;
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
 }
 .about ul li {
-margin: 0.5rem 0;
-color: #aaa;
-font-size: 0.95rem;
+  margin: 0.5rem 0;
+  color: #aaa;
+  font-size: 0.95rem;
 }
 
 footer {
-text-align: center;
-color: #555;
-padding: 2rem 0;
-font-size: 0.9rem;
+  text-align: center;
+  color: #555;
+  padding: 2rem 0;
+  font-size: 0.9rem;
 }
 
 /* Bot Features Section */
 .bot-section {
-background: #121223;
-border-radius: 8px;
-padding: 2rem;
-margin: 3rem auto;
-max-width: 1000px;
-box-shadow: 0 0 15px #00bfff88;
-color: #cceeff;
-line-height: 1.5;
-font-size: 1rem;
+  background: #121223;
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 3rem auto;
+  max-width: 1000px;
+  box-shadow: 0 0 15px #00bfff88;
+  color: #cceeff;
+  line-height: 1.5;
+  font-size: 1rem;
 }
 .bot-section h2 {
-color: #00d9ff;
-margin-bottom: 1rem;
-font-size: 1.8rem;
-text-shadow: 0 0 10px #00d9ff;
-display: flex;
-align-items: center;
-gap: 0.5rem;
+  color: #00d9ff;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  text-shadow: 0 0 10px #00d9ff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 .bot-section ul {
-list-style: none;
-padding-left: 1rem;
-margin-bottom: 1.5rem;
+  list-style: none;
+  padding-left: 1rem;
+  margin-bottom: 1.5rem;
 }
 .bot-section ul li {
-margin-bottom: 0.6rem;
-padding-left: 1.2rem;
-position: relative;
+  margin-bottom: 0.6rem;
+  padding-left: 1.2rem;
+  position: relative;
 }
 .bot-section ul li::before {
-content: "🔹";
-position: absolute;
-left: 0;
-color: #00bfff;
+  content: "🔹";
+  position: absolute;
+  left: 0;
+  color: #00bfff;
 }
 .bot-section code {
-background: #0a1a2f;
-padding: 0.1rem 0.4rem;
-border-radius: 4px;
-color: #00e5ff;
-font-weight: 600;
+  background: #0a1a2f;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: #00e5ff;
+  font-weight: 600;
 }
 
 /* Bot toggle button styling */
 #toggleBotBtn {
-display: block;
-margin: 2rem auto 0 auto;
-background-color: #00bfff;
-color: white;
-border: none;
-padding: 0.75rem 1.5rem;
-border-radius: 0.6rem;
-font-weight: 700;
-font-size: 1.1rem;
-cursor: pointer;
-box-shadow: 0 0 15px #00bfffaa;
-transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: block;
+  margin: 2rem auto 0 auto;
+  background-color: #00bfff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.6rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00bfffaa;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 #toggleBotBtn:hover {
-transform: scale(1.05);
-box-shadow: 0 0 25px #00
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #00bfff;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  header .container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  .top-discord-banner {
+    padding: 2rem 1rem;
+  }
+  .hero {
+    padding-top: 4rem;
+  }
+  .btn {
+    width: 90%;
+    max-width: 300px;
+    margin: 0.5rem auto;
+  }
+  .hero img {
+    width: 140px;
+  }
+}
+</style>
+<script>
+function showCheats() {
+  const cheats = document.querySelector('.cheats-section');
+  cheats.classList.toggle('active');
+}
+function toggleBotFeatures() {
+  const botSection = document.querySelector('.bot-section');
+  botSection.classList.toggle('active');
+  if (botSection.classList.contains('active')) {
+    botSection.style.display = 'block';
+    document.getElementById('toggleBotBtn').textContent = '🚀 Hide Bot Features';
+  } else {
+    botSection.style.display = 'none';
+    document.getElementById('toggleBotBtn').textContent = '🤖 Show Bot Features';
+  }
+}
+window.onload = () => {
+  // Initially hide the bot features section
+  document.querySelector('.bot-section').style.display = 'none';
+  document.getElementById('toggleBotBtn').textContent = '🤖 Show Bot Features';
+}
+
+// Terms of Service modal open/close
+document.addEventListener('DOMContentLoaded', function() {
+  const tosLink = document.getElementById('tosLink');
+  const tosModal = document.getElementById('tosModal');
+  const closeTosBtn = document.getElementById('closeTosBtn');
+
+  tosLink.addEventListener('click', function(e){
+    e.preventDefault();
+    tosModal.style.display = 'block';
+  });
+  closeTosBtn.addEventListener('click', function(){
+    tosModal.style.display = 'none';
+  });
+});
+
+// Anti-dev tools protections
+window.addEventListener('contextmenu', function(e){
+  e.preventDefault(); // block right-click menu
+});
+
+window.addEventListener('keydown', function(e){
+  // Block F12
+  if(e.key === 'F12'){
+    e.preventDefault();
+  }
+  // Block Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())){
+    e.preventDefault();
+  }
+  // Block Ctrl+U (view source)
+  if(e.ctrlKey && e.key.toUpperCase() === 'U'){
+    e.preventDefault();
+  }
+});
+</script>
+</head>
+<body>
+<header>
+  <div class="container">
+    <strong>GLOBAL</strong>
+    <nav>
+      <a onclick="location.reload()">Home</a>
+      <a onclick="showCheats()">Cheats</a>
+      <a href="#" style="opacity: 0.6;">Store (Coming Soon)</a>
+      <a href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
+    </nav>
+  </div>
+</header>
+
+<div class="top-discord-banner">
+  <a href="https://discord.gg/SJP5F6hkU5" class="btn" target="_blank">🔥 Join Our Discord for Access 🔥</a>
+</div>
+
+<section class="hero container">
+  <img src="https://raw.githubusercontent.com/ynwglobal/global-gta5-mod-hub/main/global_logo.png" alt="GLOBAL Logo" />
+  <h1>Next-Gen Game Enhancements</h1>
+  <p>GLOBAL is built for elite modding. Stealthy. Powerful. Custom. Join the new era of domination.</p>
+  <a class="btn" href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
+  <a class="btn" href="#" onclick="showCheats()">Get Started</a>
+
+  <!-- Bot features toggle button -->
+  <button id="toggleBotBtn" onclick="toggleBotFeatures()">🤖 Show Bot Features</button>
+</section>
+
+<section class="bot-section container">
+  <h2>🤖 Bot Features Overview</h2>
+  <p>
+    Boost your server with a powerful, all-in-one Discord bot packed with community tools, Fortnite integration, moderation utilities, and smart security features — all wrapped in a sleek, reliable system.
+  </p>
+
+  <h3>📝 Reputation & Voting System</h3>
+  <ul>
+    <li><code>/vouch</code> – Vouch for trusted users</li>
+    <li><code>/vouches</code> – View a user’s received vouches</li>
+    <li><code>/leaderboard</code> – See the top vouched members</li>
+  </ul>
+
+  <h3>💡 Suggestions System</h3>
+  <ul>
+    <li><code>/setsuggestionchannel</code> – Set the channel for suggestions</li>
+    <li><code>/unsetsuggestionchannel</code> – Remove the active suggestion channel</li>
+    <li><code>/suggeststatus</code> – View the current suggestion setup status</li>
+    <li><code>/viewvotes</code> – Display votes made through the suggestion system</li>
+  </ul>
+
+  <h3>🎮 Fortnite Integration</h3>
+  <ul>
+    <li><code>/battleinfo</code> – Get the latest Fortnite news</li>
+    <li><code>/battlemap</code> – View the current Fortnite Battle Royale map</li>
+  </ul>
+
+  <h3>🧩 Utilities & Tools</h3>
+  <ul>
+    <li><code>/url</code> – Analyze and preview any URL</li>
+    <li><code>/geolocate</code> – Approximate the location of an IP address</li>
+    <li><code>/vpncheck</code> – Detect if an IP is using a VPN or proxy</li>
+    <li><code>/checkban</code> – Check if a Rockstar username or ID is banned by Battleye</li>
+    <li><code>/generatekey</code> – Generate a lifetime key for premium features</li>
+    <li><code>/avatar</code> – View someone’s profile picture instantly</li>
+  </ul>
+
+  <h3>🛠️ Moderation & Info</h3>
+  <ul>
+    <li><code>/help</code> – View all available commands</li>
+    <li><code>/invite</code> – Generate a permanent invite link for your server</li>
+    <li><code>/ping</code> – Check the bot’s current response time</li>
+    <li><code>/nuke</code> – Clear all messages in a channel instantly</li>
+    <li><code>/premium</code> – Learn how to unlock premium features</li>
+  </ul>
+
+  <p style="color:#ffcc00; font-weight: 600; margin-top:1rem;">
+    ⚠️ <strong>Note:</strong> This bot must be used within a server to prevent abuse — unless explicitly approved by the developer.
+  </p>
+</section>
+
+<section class="cheats-section container">
+  <div class="alert-message" id="discord-alert">
+    ⚠️ Join our <a href="https://discord.gg/SJP5F6hkU5" target="_blank" style="color: #ffcc00; text-decoration: underline;">Discord</a> to access the any of our Tools.
+  </div>
+  <h2>Cheats</h2>
+  <div class="cheat-item">GTA V — <strong>🛠 In Development</strong><span>Full GLOBAL Mod Menu</span></div>
+  <div class="cheat-item">Warzone — <strong>🛠 In Development</strong><span>GLOBAL Exploit Console</span></div>
+  <div class="cheat-item">Fortnite — <strong>🛠 In Development</strong><span>Fortnite (External) — In development. PC only. Undetected. Advanced features coming soon.</span></div>
+
+  <div class="cheat-item">RDR2 / Others — <strong>🛠 Coming Soon</strong><span>Stay Tuned for Updates</span></div>
+  <div class="cheat-item">Five M (NOT LUA) — <strong>🛠 Coming Soon</strong><span>Full Global menu + spoofer</span></div>
+  <div class="cheat-item">Minecraft — <strong>🛠 In Development</strong><span>Enhanced Modding Tools</span></div>
+</section>
+
+<section class="faq container">
+  <h3>Frequently Asked Questions</h3>
+  <p class="question">Q: Are these tools safe?</p>
+  <p>A: All global menus will be tested extensively and will be updated regularly.</p>
+  <p class="question">Q: How do I get access?</p>
+  <p>A: Join our Discord and follow the steps to verify and gain instant access.</p>
+  <p class="question">Q: What platforms are supported?</p>
+  <p>A: PC support will only available for all select titles.</p>
+</section>
+
+<section class="about container">
+  <h2>About GLOBAL</h2>
+  <p>GLOBAL is the future of modding. Engineered for precision, performance, and power. Once private — now public.</p>
+  <ul>
+    <li>⚡ Real-time cheat toggles</li>
+    <li>⚡ Controller - compatibility</li>
+    <li>⚡ Frequent updates</li>
+    <li>⚡ User-friendly interface</li>
+  </ul>
+  <p><strong>High Performance</strong> • <strong>Secure</strong> • <strong>Visual Customization</strong></p>
+</section>
+
+<footer>
+  &copy; 2025 Global Mod Team. Not affiliated with Rockstar Games built for domination.
+  <br />
+  <a href="#" id="tosLink" style="color: #00bfff; cursor: pointer; text-decoration: underline; font-weight: 600; margin-top: 0.5rem; display: inline-block;">Terms of Service</a>
+</footer>
+
+<!-- Terms of Service Modal -->
+<div id="tosModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index:9999; overflow:auto;">
+  <div style="background:#10101a; max-width:600px; margin:5% auto; padding:2rem; border-radius:8px; color:#ccc; box-shadow:0 0 20px #00bfff;">
+    <h2 style="color:#00bfff; margin-bottom:1rem;">Terms of Service</h2>
+    <p>Welcome to GLOBAL. By using our site and services, you agree to the following terms:</p>
+    <ul>
+      <li>You acknowledge that the software and tools provided are for educational and personal use only.</li>
+      <li>Unauthorized distribution or misuse may result in account suspension or legal action.</li>
+      <li>GLOBAL is not affiliated with any game developers or companies.</li>
+      <li>Use at your own risk. We are not responsible for bans or damages.</li>
+      <li>All rights reserved. Respect copyrights and intellectual property.</li>
+    </ul>
+    <p style="margin-top:1rem;">Please contact support for any questions or clarifications.</p>
+    <button id="closeTosBtn" style="margin-top:1.5rem; padding:0.6rem 1.2rem; background:#00bfff; border:none; border-radius:6px; color:#000; font-weight:700; cursor:pointer; box-shadow:0 0 10px #00bfff;">Close</button>
+  </div>
+</div>
+</body>
+</html>
