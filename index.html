@@ -1,1241 +1,1098 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLOBAL Loader - Game Enhancement Tool</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Prevent text selection to make content harder to copy */
-            -webkit-user-select: none;  /* Safari */
-            -moz-user-select: none;     /* Firefox */
-            -ms-user-select: none;      /* Internet Explorer/Edge */
-            user-select: none;          /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
-        }
-
-        body {
-            background: #000000;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(0, 255, 127, 0.08) 0%, transparent 50%),
-                linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #111111 100%);
-            color: #ffffff;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,191,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        .floating-particles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(0, 191, 255, 0.6);
-            border-radius: 50%;
-            animation: float 8s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .loader-container {
-            display: flex;
-            height: 100vh;
-            backdrop-filter: blur(1px);
-        }
-
-        .sidebar {
-            width: 300px;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
-            border-right: 1px solid rgba(0, 191, 255, 0.3);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
-            position: relative; /* For mobile toggle */
-            z-index: 10;
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(0, 191, 255, 0.2) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-        }
-
-        .logo h1 {
-            color: #00bfff;
-            font-size: 2.2rem;
-            text-shadow: 0 0 30px #00bfff, 0 0 60px rgba(0, 191, 255, 0.5);
-            margin-bottom: 5px;
-            font-weight: 900;
-            letter-spacing: 2px;
-        }
-
-        .logo p {
-            color: #888;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .user-info {
-            background: rgba(0, 191, 255, 0.08);
-            border: 1px solid rgba(0, 191, 255, 0.3);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.1);
-        }
-
-        .user-info h3 {
-            color: #00bfff;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .user-status {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        .status-active {
-            color: #00ff00;
-            text-shadow: 0 0 5px #00ff00;
-        }
-
-        .status-premium {
-            color: #ffd700;
-            text-shadow: 0 0 5px #ffd700;
-        }
-
-        .nav-menu {
-            flex: 1;
-            overflow-y: auto; /* Enable scrolling for nav items */
-            padding-right: 5px; /* Space for scrollbar */
-        }
-
-        .nav-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 191, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .nav-item:hover::before {
-            left: 100%;
-        }
-
-        .nav-item:hover {
-            background: rgba(0, 191, 255, 0.15);
-            border-color: rgba(0, 191, 255, 0.5);
-            transform: translateX(8px);
-            box-shadow: 0 4px 20px rgba(0, 191, 255, 0.2);
-        }
-
-        .nav-item.active {
-            background: rgba(0, 191, 255, 0.2);
-            border-color: #00bfff;
-            box-shadow: 0 0 25px rgba(0, 191, 255, 0.4);
-            transform: translateX(5px);
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 25px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes fadeInUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(30px);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0);
-            }
-        }
-
-        .status-bar {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 12px 25px;
-            border-top: 1px solid rgba(0, 191, 255, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            font-size: 0.9rem; /* Adjusted for mobile */
-        }
-
-        .cheat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 25px;
-        }
-
-        .cheat-card {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .cheat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00bfff, transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .cheat-card:hover::before {
-            transform: translateX(100%);
-        }
-
-        .cheat-card:hover {
-            border-color: rgba(0, 191, 255, 0.5);
-            box-shadow: 0 8px 40px rgba(0, 191, 255, 0.15);
-            transform: translateY(-5px);
-        }
-
-        .cheat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
-            gap: 10px; /* Space between title and status if wrapped */
-        }
-
-        .cheat-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #00bfff;
-            text-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
-        }
-
-        .cheat-status {
-            padding: 6px 14px;
-            border-radius: 25px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-undetected {
-            background: linear-gradient(45deg, #00ff00, #00cc00);
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-        }
-
-        .status-detected {
-            background: linear-gradient(45deg, #ff0000, #cc0000);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-        }
-
-        .status-development {
-            background: linear-gradient(45deg, #ffa500, #ff8c00);
-            color: #000;
-            box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
-        }
-
-        .cheat-description {
-            color: #ccc;
-            margin-bottom: 18px;
-            line-height: 1.5;
-            font-size: 0.95rem;
-        }
-
-        .cheat-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap; /* Allow buttons to wrap */
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            flex-grow: 1; /* Allow buttons to grow and fill space */
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #00bfff, #0099cc);
-            color: #000;
-            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(45deg, #0099cc, #007799);
-            box-shadow: 0 6px 25px rgba(0, 191, 255, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .settings-grid {
-            display: grid;
-            gap: 25px;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted for mobile */
-        }
-
-        .setting-group {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-        }
-
-        .setting-group h3 {
-            color: #00bfff;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.95rem; /* Adjusted for mobile */
-        }
-
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 65px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .toggle-switch.active {
-            background: linear-gradient(45deg, #00bfff, #0099cc);
-            box-shadow: 0 0 20px rgba(0, 191, 255, 0.4);
-        }
-
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            background: #fff;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .toggle-switch.active::after {
-            transform: translateX(33px);
-        }
-
-        .auth-form {
-            max-width: 450px;
-            margin: 50px auto;
-            padding: 50px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(0, 191, 255, 0.3);
-            border-radius: 20px;
-            text-align: center;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ccc;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #00bfff;
-            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        .remember-login {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
-
-        .remember-login input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-
-        .connection-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .connection-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #00ff00;
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 10px #00ff00;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .news-item {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .news-item:hover {
-            border-color: rgba(0, 191, 255, 0.3);
-            transform: translateX(5px);
-        }
-
-        .news-date {
-            color: #888;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-
-        .news-title {
-            color: #00bfff;
-            font-weight: bold;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        /* Mobile specific styles */
-        .mobile-menu-toggle {
-            display: none; /* Hidden on desktop */
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 191, 255, 0.15);
-            border: 1px solid rgba(0, 191, 255, 0.4);
-            color: #00bfff;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            z-index: 100; /* Ensure it's on top */
-        }
-
-        @media (max-width: 768px) {
-            body {
-                overflow-y: auto; /* Allow scrolling on body when sidebar is collapsed */
-            }
-
-            .loader-container {
-                flex-direction: column;
-                height: auto; /* Allow content to dictate height */
-                min-height: 100vh; /* Ensure it takes full viewport height if content is small */
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                max-height: 60px; /* Initially collapsed height */
-                overflow: hidden;
-                border-right: none;
-                border-bottom: 1px solid rgba(0, 191, 255, 0.3);
-                transition: max-height 0.5s ease-in-out;
-            }
-
-            .sidebar.active {
-                max-height: 500px; /* Expanded height */
-            }
-
-            .sidebar > *:not(.mobile-menu-toggle) {
-                display: none; /* Hide content by default */
-            }
-            .sidebar.active > *:not(.mobile-menu-toggle) {
-                display: flex; /* Show content when active */
-                flex-direction: column;
-            }
-            .sidebar.active .logo,
-            .sidebar.active .user-info,
-            .sidebar.active .nav-menu {
-                display: block; /* Specific elements to show as block */
-            }
-
-            .mobile-menu-toggle {
-                display: block; /* Show on mobile */
-            }
-            
-            .logo {
-                margin-bottom: 15px;
-            }
-            .logo h1 {
-                font-size: 1.8rem;
-            }
-            .logo p {
-                font-size: 0.8rem;
-            }
-
-            .user-info {
-                padding: 15px;
-                margin-bottom: 15px;
-            }
-
-            .nav-menu {
-                padding-right: 0; /* No scrollbar space on mobile */
-                max-height: 250px; /* Limit nav height on mobile to prevent overflow */
-            }
-
-            .nav-item {
-                padding: 12px 15px;
-                font-size: 0.9rem;
-            }
-
-            .main-content {
-                padding: 15px;
-            }
-
-            .cheat-grid, .settings-grid {
-                grid-template-columns: 1fr; /* Single column on mobile */
-            }
-
-            .cheat-card, .setting-group {
-                padding: 20px;
-            }
-            .cheat-title {
-                font-size: 1.1rem;
-            }
-            .cheat-description {
-                font-size: 0.9rem;
-            }
-
-            .status-bar {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 10px 15px;
-                font-size: 0.85rem;
-                gap: 5px;
-            }
-        }
-
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0, 191, 255, 0.6);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 191, 255, 0.8);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOBAL Loader - Game Enhancement Tool</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+background: #000000;
+background-image:
+radial-gradient(circle at 20% 80%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
+radial-gradient(circle at 80% 20%, rgba(0, 255, 127, 0.08) 0%, transparent 50%),
+linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #111111 100%);
+color: #ffffff;
+height: 100vh;
+overflow: hidden;
+position: relative;
+}
+
+.bg-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,191,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+opacity: 0.3;
+z-index: -1;
+}
+
+.floating-particles {
+position: fixed;
+width: 100%;
+height: 100%;
+overflow: hidden;
+z-index: -1;
+}
+
+.particle {
+position: absolute;
+background: rgba(0, 191, 255, 0.6);
+border-radius: 50%;
+animation: float 8s infinite linear;
+}
+
+@keyframes float {
+0% {
+transform: translateY(100vh) rotate(0deg);
+opacity: 0;
+}
+10% {
+opacity: 1;
+}
+90% {
+opacity: 1;
+}
+100% {
+transform: translateY(-10vh) rotate(360deg);
+opacity: 0;
+}
+}
+
+.loader-container {
+display: flex;
+height: 100vh;
+backdrop-filter: blur(1px);
+}
+
+.sidebar {
+width: 300px;
+background: rgba(0, 0, 0, 0.85);
+backdrop-filter: blur(15px);
+border-right: 1px solid rgba(0, 191, 255, 0.3);
+padding: 20px;
+display: flex;
+flex-direction: column;
+box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+text-align: center;
+margin-bottom: 30px;
+position: relative;
+}
+
+.logo::before {
+content: '';
+position: absolute;
+top: -10px;
+left: 50%;
+transform: translateX(-50%);
+width: 80px;
+height: 80px;
+background: radial-gradient(circle, rgba(0, 191, 255, 0.2) 0%, transparent 70%);
+border-radius: 50%;
+z-index: -1;
+}
+
+.logo h1 {
+color: #00bfff;
+font-size: 2.2rem;
+text-shadow: 0 0 30px #00bfff, 0 0 60px rgba(0, 191, 255, 0.5);
+margin-bottom: 5px;
+font-weight: 900;
+letter-spacing: 2px;
+}
+
+.logo p {
+color: #888;
+font-size: 0.9rem;
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+
+.user-info {
+background: rgba(0, 191, 255, 0.08);
+border: 1px solid rgba(0, 191, 255, 0.3);
+border-radius: 12px;
+padding: 18px;
+margin-bottom: 25px;
+box-shadow: 0 4px 15px rgba(0, 191, 255, 0.1);
+}
+
+.user-info h3 {
+color: #00bfff;
+margin-bottom: 12px;
+font-size: 1.1rem;
+}
+
+.user-status {
+display: flex;
+justify-content: space-between;
+margin-bottom: 8px;
+font-size: 0.9rem;
+}
+
+.status-active {
+color: #00ff00;
+text-shadow: 0 0 5px #00ff00;
+}
+
+.status-premium {
+color: #ffd700;
+text-shadow: 0 0 5px #ffd700;
+}
+
+.nav-menu {
+flex: 1;
+}
+
+.nav-item {
+background: rgba(255, 255, 255, 0.03);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 8px;
+padding: 14px 18px;
+margin-bottom: 12px;
+cursor: pointer;
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+display: flex;
+align-items: center;
+gap: 12px;
+font-weight: 500;
+position: relative;
+overflow: hidden;
+}
+
+.nav-item::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(0, 191, 255, 0.1), transparent);
+transition: left 0.5s;
+}
+
+.nav-item:hover::before {
+left: 100%;
+}
+
+.nav-item:hover {
+background: rgba(0, 191, 255, 0.15);
+border-color: rgba(0, 191, 255, 0.5);
+transform: translateX(8px);
+box-shadow: 0 4px 20px rgba(0, 191, 255, 0.2);
+}
+
+.nav-item.active {
+background: rgba(0, 191, 255, 0.2);
+border-color: #00bfff;
+box-shadow: 0 0 25px rgba(0, 191, 255, 0.4);
+transform: translateX(5px);
+}
+
+.main-content {
+flex: 1;
+padding: 25px;
+overflow-y: auto;
+background: rgba(0, 0, 0, 0.2);
+}
+
+.content-section {
+display: none;
+}
+
+.content-section.active {
+display: block;
+animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.status-bar {
+background: rgba(0, 0, 0, 0.9);
+padding: 12px 25px;
+border-top: 1px solid rgba(0, 191, 255, 0.3);
+display: flex;
+justify-content: space-between;
+align-items: center;
+backdrop-filter: blur(10px);
+}
+
+.cheat-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+gap: 25px;
+margin-bottom: 25px;
+}
+
+.cheat-card {
+background: rgba(0, 0, 0, 0.6);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 15px;
+padding: 25px;
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+backdrop-filter: blur(10px);
+}
+
+.cheat-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+height: 2px;
+background: linear-gradient(90deg, transparent, #00bfff, transparent);
+transform: translateX(-100%);
+transition: transform 0.6s;
+}
+
+.cheat-card:hover::before {
+transform: translateX(100%);
+}
+
+.cheat-card:hover {
+border-color: rgba(0, 191, 255, 0.5);
+box-shadow: 0 8px 40px rgba(0, 191, 255, 0.15);
+transform: translateY(-5px);
+}
+
+.cheat-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 18px;
+}
+
+.cheat-title {
+font-size: 1.3rem;
+font-weight: bold;
+color: #00bfff;
+text-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+}
+
+.cheat-status {
+padding: 6px 14px;
+border-radius: 25px;
+font-size: 0.8rem;
+font-weight: bold;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+
+.status-undetected {
+background: linear-gradient(45deg, #00ff00, #00cc00);
+color: #000;
+box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+.status-detected {
+background: linear-gradient(45deg, #ff0000, #cc0000);
+color: #fff;
+box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+.status-development {
+background: linear-gradient(45deg, #ffa500, #ff8c00);
+color: #000;
+box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+}
+
+.cheat-description {
+color: #ccc;
+margin-bottom: 18px;
+line-height: 1.5;
+font-size: 0.95rem;
+}
+
+.cheat-actions {
+display: flex;
+gap: 12px;
+}
+
+.btn {
+padding: 10px 20px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-weight: 600;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+
+.btn::before {
+content: '';
+position: absolute;
+top: 50%;
+left: 50%;
+width: 0;
+height: 0;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 50%;
+transform: translate(-50%, -50%);
+transition: width 0.3s, height 0.3s;
+}
+
+.btn:hover::before {
+width: 300px;
+height: 300px;
+}
+
+.btn-primary {
+background: linear-gradient(45deg, #00bfff, #0099cc);
+color: #000;
+box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+}
+
+.btn-primary:hover {
+background: linear-gradient(45deg, #0099cc, #007799);
+box-shadow: 0 6px 25px rgba(0, 191, 255, 0.5);
+transform: translateY(-2px);
+}
+
+.btn-secondary {
+background: rgba(255, 255, 255, 0.08);
+color: #fff;
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+background: rgba(255, 255, 255, 0.15);
+border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn:disabled {
+opacity: 0.4;
+cursor: not-allowed;
+transform: none !important;
+}
+
+.settings-grid {
+display: grid;
+gap: 25px;
+}
+
+.setting-group {
+background: rgba(0, 0, 0, 0.6);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+padding: 25px;
+backdrop-filter: blur(10px);
+}
+
+.setting-group h3 {
+color: #00bfff;
+margin-bottom: 20px;
+font-size: 1.2rem;
+}
+
+.setting-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 12px 0;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-item:last-child {
+border-bottom: none;
+}
+
+.toggle-switch {
+position: relative;
+width: 65px;
+height: 32px;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 16px;
+cursor: pointer;
+transition: all 0.3s ease;
+border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.toggle-switch.active {
+background: linear-gradient(45deg, #00bfff, #0099cc);
+box-shadow: 0 0 20px rgba(0, 191, 255, 0.4);
+}
+
+.toggle-switch::after {
+content: '';
+position: absolute;
+width: 26px;
+height: 26px;
+background: #fff;
+border-radius: 50%;
+top: 2px;
+left: 2px;
+transition: transform 0.3s ease;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch.active::after {
+transform: translateX(33px);
+}
+
+.auth-form {
+max-width: 450px;
+margin: 50px auto;
+padding: 50px;
+background: rgba(0, 0, 0, 0.8);
+border: 1px solid rgba(0, 191, 255, 0.3);
+border-radius: 20px;
+text-align: center;
+backdrop-filter: blur(15px);
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+margin-bottom: 25px;
+text-align: left;
+}
+
+.form-group label {
+display: block;
+margin-bottom: 8px;
+color: #ccc;
+font-weight: 500;
+}
+
+.form-group input {
+width: 100%;
+padding: 15px;
+background: rgba(0, 0, 0, 0.6);
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 8px;
+color: #fff;
+font-size: 1rem;
+transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+outline: none;
+border-color: #00bfff;
+box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+background: rgba(0, 0, 0, 0.8);
+}
+
+.remember-login {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 20px;
+justify-content: center;
+}
+
+.remember-login input[type="checkbox"] {
+width: auto;
+margin: 0;
+}
+
+.connection-indicator {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.connection-dot {
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background: #00ff00;
+animation: pulse 2s infinite;
+box-shadow: 0 0 10px #00ff00;
+}
+
+@keyframes pulse {
+0% { opacity: 1; transform: scale(1); }
+50% { opacity: 0.7; transform: scale(1.1); }
+100% { opacity: 1; transform: scale(1); }
+}
+
+.news-item {
+background: rgba(0, 0, 0, 0.6);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+padding: 20px;
+margin-bottom: 20px;
+backdrop-filter: blur(10px);
+transition: all 0.3s ease;
+}
+
+.news-item:hover {
+border-color: rgba(0, 191, 255, 0.3);
+transform: translateX(5px);
+}
+
+.news-date {
+color: #888;
+font-size: 0.9rem;
+margin-bottom: 8px;
+}
+
+.news-title {
+color: #00bfff;
+font-weight: bold;
+margin-bottom: 12px;
+font-size: 1.1rem;
+}
+
+::-webkit-scrollbar {
+width: 8px;
+}
+
+::-webkit-scrollbar-track {
+background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+background: rgba(0, 191, 255, 0.6);
+border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+background: rgba(0, 191, 255, 0.8);
+}
+</style>
 </head>
 <body>
-    <div class="bg-overlay"></div>
-    <div class="floating-particles" id="particles"></div>
-    
-    <div class="loader-container">
-        <div class="sidebar" id="sidebar">
-            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰ Menu</div>
-            <div class="logo">
-                <h1>GLOBAL</h1>
-                <p>Game Enhancement Loader</p>
-            </div>
+<div class="bg-overlay"></div>
+<div class="floating-particles" id="particles"></div>
 
-            <div class="user-info" id="userInfo" style="display: none;">
-                <h3>Welcome, <span id="username">User</span></h3>
-                <div class="user-status">
-                    <span>Status:</span>
-                    <span class="status-active">Active</span>
-                </div>
-                <div class="user-status">
-                    <span>Plan:</span>
-                    <span class="status-premium">Premium</span>
-                </div>
-                <div class="user-status">
-                    <span>HWID:</span>
-                    <span id="hwid">Verified</span>
-                </div>
-            </div>
+<div class="loader-container">
+<div class="sidebar">
+<div class="logo">
+<h1>GLOBAL</h1>
+<p>Game Enhancement Loader</p>
+</div>
 
-            <div class="nav-menu">
-                <div class="nav-item active" onclick="showSection('dashboard', this)">
-                    🏠 Dashboard
-                </div>
-                <div class="nav-item" onclick="showSection('cheats', this)">
-                    🎮 Game Tools
-                </div>
-                <div class="nav-item" onclick="showSection('settings', this)">
-                    ⚙️ Settings
-                </div>
-                <div class="nav-item" onclick="showSection('news', this)">
-                    📰 Updates
-                </div>
-                <div class="nav-item" onclick="logout()">
-                    🚪 Logout
-                </div>
-            </div>
-        </div>
+<div class="user-info" id="userInfo" style="display: none;">
+<h3>Welcome, <span id="username">User</span></h3>
+<div class="user-status">
+<span>Status:</span>
+<span class="status-active">Active</span>
+</div>
+<div class="user-status">
+<span>Plan:</span>
+<span class="status-premium">Premium</span>
+</div>
+<div class="user-status">
+<span>HWID:</span>
+<span id="hwid">Verified</span>
+</div>
+</div>
 
-        <div class="main-content">
-            <div id="loginSection" class="content-section active">
-                <div class="auth-form">
-                    <h2 style="color: #00bfff; margin-bottom: 40px; font-size: 1.8rem;">GLOBAL Loader Authentication</h2>
-                    <div class="form-group">
-                        <label for="loginUsername">Username</label>
-                        <input type="text" id="loginUsername" placeholder="Enter username">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter password">
-                    </div>
-                    <div class="form-group">
-                        <label for="licenseKey">License Key</label>
-                        <input type="text" id="licenseKey" placeholder="Enter license key">
-                    </div>
-                    <div class="remember-login">
-                        <input type="checkbox" id="rememberLogin">
-                        <label for="rememberLogin" style="margin: 0; color: #ccc;">Remember my login</label>
-                    </div>
-                    <button class="btn btn-primary" onclick="authenticate()" style="width: 100%; padding: 15px; font-size: 1.1rem;">
-                        🔐 Authenticate
-                    </button>
-                    <p style="margin-top: 25px; color: #888; font-size: 0.9rem;">
-                        Join our Discord for access keys and support
-                    </p>
-                </div>
-            </div>
+<div class="nav-menu">
+<div class="nav-item active" onclick="showSection('dashboard')">
+🏠 Dashboard
+</div>
+<div class="nav-item" onclick="showSection('cheats')">
+🎮 Game Tools
+</div>
+<div class="nav-item" onclick="showSection('settings')">
+⚙️ Settings
+</div>
+<div class="nav-item" onclick="showSection('news')">
+📰 Updates
+</div>
+<div class="nav-item" onclick="logout()">
+🚪 Logout
+</div>
+</div>
+</div>
 
-            <div id="dashboard" class="content-section">
-                <h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Dashboard</h2>
-                <div class="cheat-grid">
-                    <div class="cheat-card">
-                        <h3 style="color: #00bfff; margin-bottom: 15px;">System Status</h3>
-                        <div style="margin-top: 15px;">
-                            <div class="user-status">
-                                <span>Backend Connection:</span>
-                                <span class="status-active">Online</span>
-                            </div>
-                            <div class="user-status">
-                                <span>Last Update:</span>
-                                <span id="lastUpdate">Just now</span>
-                            </div>
-                            <div class="user-status">
-                                <span>Active Tools:</span>
-                                <span id="activeTools">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cheat-card">
-                        <h3 style="color: #00bfff; margin-bottom: 15px;">Quick Actions</h3>
-                        <div style="margin-top: 15px;">
-                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="checkUpdates()">
-                                🔄 Check for Updates
-                            </button>
-                            <button class="btn btn-secondary" style="width: 100%; margin-bottom: 12px;" onclick="showSection('cheats', this)">
-                                🎮 Launch Tools
-                            </button>
-                            <button class="btn btn-secondary" style="width: 100%;" onclick="openDiscord()">
-                                💬 Discord Support
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="main-content">
+<div id="loginSection" class="content-section active">
+<div class="auth-form">
+<h2 style="color: #00bfff; margin-bottom: 40px; font-size: 1.8rem;">GLOBAL Loader Authentication</h2>
+<div class="form-group">
+<label>Username</label>
+<input type="text" id="loginUsername" placeholder="Enter username">
+</div>
+<div class="form-group">
+<label>Password</label>
+<input type="password" id="loginPassword" placeholder="Enter password">
+</div>
+<div class="form-group">
+<label>License Key</label>
+<input type="text" id="licenseKey" placeholder="Enter license key">
+</div>
+<div class="remember-login">
+<input type="checkbox" id="rememberLogin">
+<label for="rememberLogin" style="margin: 0; color: #ccc;">Remember my login</label>
+</div>
+<button class="btn btn-primary" onclick="authenticate()" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+🔐 Authenticate
+</button>
+<p style="margin-top: 25px; color: #888; font-size: 0.9rem;">
+Join our Discord for access keys and support
+</p>
+</div>
+</div>
 
-            <div id="cheats" class="content-section">
-                <h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Game Enhancement Tools</h2>
-                <div class="cheat-grid" id="cheatsGrid">
-                </div>
-            </div>
+<div id="dashboard" class="content-section">
+<h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Dashboard</h2>
+<div class="cheat-grid">
+<div class="cheat-card">
+<h3 style="color: #00bfff; margin-bottom: 15px;">System Status</h3>
+<div style="margin-top: 15px;">
+<div class="user-status">
+<span>Backend Connection:</span>
+<span class="status-active">Online</span>
+</div>
+<div class="user-status">
+<span>Last Update:</span>
+<span id="lastUpdate">Just now</span>
+</div>
+<div class="user-status">
+<span>Active Tools:</span>
+<span id="activeTools">0</span>
+</div>
+</div>
+</div>
+<div class="cheat-card">
+<h3 style="color: #00bfff; margin-bottom: 15px;">Quick Actions</h3>
+<div style="margin-top: 15px;">
+<button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="checkUpdates()">
+🔄 Check for Updates
+</button>
+<button class="btn btn-secondary" style="width: 100%; margin-bottom: 12px;" onclick="showSection('cheats')">
+🎮 Launch Tools
+</button>
+<button class="btn btn-secondary" style="width: 100%;" onclick="openDiscord()">
+💬 Discord Support
+</button>
+</div>
+</div>
+</div>
+</div>
 
-            <div id="settings" class="content-section">
-                <h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Settings</h2>
-                <div class="settings-grid">
-                    <div class="setting-group">
-                        <h3>Application Settings</h3>
-                        <div class="setting-item">
-                            <span>Auto-update tools</span>
-                            <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
-                        </div>
-                        <div class="setting-item">
-                            <span>Start with Windows</span>
-                            <div class="toggle-switch" onclick="toggleSetting(this)"></div>
-                        </div>
-                        <div class="setting-item">
-                            <span>Minimize to tray</span>
-                            <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
-                        </div>
-                        <div class="setting-item">
-                            <span>Remember login credentials</span>
-                            <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
-                        </div>
-                    </div>
-                    <div class="setting-group">
-                        <h3>Security Settings</h3>
-                        <div class="setting-item">
-                            <span>Hardware ID protection</span>
-                            <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
-                        </div>
-                        <div class="setting-item">
-                            <span>Anti-debug protection</span>
-                            <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div id="cheats" class="content-section">
+<h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Game Enhancement Tools</h2>
+<div class="cheat-grid" id="cheatsGrid">
+</div>
+</div>
 
-            <div id="news" class="content-section">
-                <h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Updates & News</h2>
-                <div id="newsContainer">
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="settings" class="content-section">
+<h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Settings</h2>
+<div class="settings-grid">
+<div class="setting-group">
+<h3>Application Settings</h3>
+<div class="setting-item">
+<span>Auto-update tools</span>
+<div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+</div>
+<div class="setting-item">
+<span>Start with Windows</span>
+<div class="toggle-switch" onclick="toggleSetting(this)"></div>
+</div>
+<div class="setting-item">
+<span>Minimize to tray</span>
+<div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+</div>
+<div class="setting-item">
+<span>Remember login credentials</span>
+<div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+</div>
+</div>
+<div class="setting-group">
+<h3>Security Settings</h3>
+<div class="setting-item">
+<span>Hardware ID protection</span>
+<div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+</div>
+<div class="setting-item">
+<span>Anti-debug protection</span>
+<div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+</div>
+</div>
+</div>
+</div>
 
-    <div class="status-bar">
-        <div class="connection-indicator">
-            <div class="connection-dot"></div>
-            <span>Connected to GLOBAL servers</span>
-        </div>
-        <span>Version 2.1.0 | Build 2025.01</span>
-    </div>
+<div id="news" class="content-section">
+<h2 style="color: #00bfff; margin-bottom: 25px; font-size: 1.8rem;">Updates & News</h2>
+<div id="newsContainer">
+</div>
+</div>
+</div>
+</div>
 
-    <script>
-        // Start of DevTools Disabling/Deterrence Logic
-        // IMPORTANT: Client-side DevTools prevention is a deterrent, not foolproof.
-        // Determined users can always bypass these methods.
+<div class="status-bar">
+<div class="connection-indicator">
+<div class="connection-dot"></div>
+<span>Connected to GLOBAL servers</span>
+</div>
+<span>Version 2.1.0 | Build 2025.01</span>
+</div>
 
-        // 1. Disable Right-Click Context Menu
-        document.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            alert('Right-click disabled for security.'); // Optional: Inform user
-        });
+<script>
+const gameTools = [
+{
+id: 1,
+name: "Fortnite Enhancement",
+game: "Fortnite",
+status: "undetected",
+description: "Advanced external tool with ESP, aimbot, and other features. Fully undetected with regular updates.",
+version: "v3.2.1",
+lastUpdate: "2 hours ago"
+},
+{
+id: 2,
+name: "GTA V Mod Menu",
+game: "GTA V",
+status: "development",
+description: "Complete mod menu with money drops, vehicle spawning, and god mode. Currently in beta testing.",
+version: "v1.8.5",
+lastUpdate: "1 day ago"
+},
+{
+id: 3,
+name: "Warzone Tools",
+game: "Call of Duty",
+status: "detected",
+description: "Tactical enhancement suite for Warzone. Currently updating for latest patch and anti-cheat bypass.",
+version: "v2.4.0",
+lastUpdate: "3 days ago"
+},
+{
+id: 4,
+name: "Minecraft Utility",
+game: "Minecraft",
+status: "undetected",
+description: "X-Ray, speed hacks, and world manipulation tools for Minecraft. Works with all major servers.",
+version: "v1.5.2",
+lastUpdate: "5 hours ago"
+}
+];
 
-        // 2. Disable Common DevTools Keyboard Shortcuts
-        document.addEventListener('keydown', (e) => {
-            // F12 key
-            if (e.key === 'F12') {
-                e.preventDefault();
-                alert('F12 key disabled for security.');
-            }
-            // Ctrl+Shift+I (Inspect Element)
-            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-                e.preventDefault();
-                alert('Ctrl+Shift+I disabled for security.');
-            }
-            // Ctrl+Shift+J (Console)
-            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-                e.preventDefault();
-                alert('Ctrl+Shift+J disabled for security.');
-            }
-            // Ctrl+Shift+C (Select Element)
-            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-                e.preventDefault();
-                alert('Ctrl+Shift+C disabled for security.');
-            }
-            // Ctrl+U (View Page Source)
-            if (e.ctrlKey && e.key === 'U') {
-                e.preventDefault();
-                alert('Ctrl+U disabled for security.');
-            }
-        });
+const newsItems = [
+{
+date: "2025-01-19",
+title: "Fortnite Tool Updated",
+content: "New ESP features added, improved performance and stability. Anti-cheat bypass updated for latest game version."
+},
+{
+date: "2025-01-18",
+title: "Server Maintenance Complete",
+content: "All systems are now running on upgraded infrastructure with improved security and faster response times."
+},
+{
+date: "2025-01-17",
+title: "GTA V Menu Beta Released",
+content: "Beta version of GTA V mod menu is now available for premium users. Report any issues on Discord."
+}
+];
 
-        // 3. DevTools Detection (Heuristic-based)
-        // This method checks if window dimensions change in a way characteristic of DevTools opening.
-        // It's not 100% reliable but can catch many common cases.
-        const threshold = 160; // Approximate minimum width of DevTools
-        const devtoolsDetectedAction = () => {
-            // Option 1: Redirect to an empty or error page
-            // window.location.href = 'about:blank'; 
-            // Option 2: Clear content and display a message
-            document.body.innerHTML = '<h1 style="color: red; text-align: center; margin-top: 50px;">Developer Tools Detected! Access Denied.</h1>';
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
-        };
+let isAuthenticated = false;
+let currentUser = null;
 
-        const detectDevTools = () => {
-            if (window.outerWidth - window.innerWidth > threshold || 
-                window.outerHeight - window.innerHeight > threshold) {
-                devtoolsDetectedAction();
-            }
-        };
+function createParticles() {
+const container = document.getElementById('particles');
+for (let i = 0; i < 15; i++) {
+setTimeout(() => {
+const particle = document.createElement('div');
+particle.className = 'particle';
+particle.style.left = Math.random() * 100 + 'vw';
+particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px';
+particle.style.animationDelay = Math.random() * 8 + 's';
+particle.style.animationDuration = (Math.random() * 3 + 8) + 's';
+container.appendChild(particle);
 
-        // Check on resize and periodically
-        window.addEventListener('resize', detectDevTools);
-        setInterval(detectDevTools, 1000); // Check every second
+setTimeout(() => {
+particle.remove();
+}, 11000);
+}, i * 500);
+}
+}
 
-        // End of DevTools Disabling/Deterrence Logic
+function checkSavedLogin() {
+try {
+const savedData = localStorage.getItem('globalLoaderAuth');
+if (savedData) {
+const authData = JSON.parse(savedData);
+if (authData.username && authData.password && authData.licenseKey && authData.remember) {
+document.getElementById('loginUsername').value = authData.username;
+document.getElementById('loginPassword').value = authData.password;
+document.getElementById('licenseKey').value = authData.licenseKey;
+document.getElementById('rememberLogin').checked = true;
+}
+}
+} catch (e) {
+console.error("Error reading saved login:", e);
+localStorage.removeItem('globalLoaderAuth'); // Clear corrupted data
+}
+}
 
-        const gameTools = [
-            {
-                id: 1,
-                name: "Fortnite Enhancement",
-                game: "Fortnite",
-                status: "undetected",
-                description: "Advanced external tool with ESP, aimbot, and other features. Fully undetected with regular updates.",
-                version: "v3.2.1",
-                lastUpdate: "2 hours ago"
-            },
-            {
-                id: 2,
-                name: "GTA V Mod Menu",
-                game: "GTA V",
-                status: "development",
-                description: "Complete mod menu with money drops, vehicle spawning, and god mode. Currently in beta testing.",
-                version: "v1.8.5",
-                lastUpdate: "1 day ago"
-            },
-            {
-                id: 3,
-                name: "Warzone Tools",
-                game: "Call of Duty",
-                status: "detected",
-                description: "Tactical enhancement suite for Warzone. Currently updating for latest patch and anti-cheat bypass.",
-                version: "v2.4.0",
-                lastUpdate: "3 days ago"
-            },
-            {
-                id: 4,
-                name: "Minecraft Utility",
-                game: "Minecraft",
-                status: "undetected",
-                description: "X-Ray, speed hacks, and world manipulation tools for Minecraft. Works with all major servers.",
-                version: "v1.5.2",
-                lastUpdate: "5 hours ago"
-            }
-        ];
+function saveLogin(username, password, licenseKey, remember) {
+if (remember) {
+const authData = { username, password, licenseKey, remember };
+localStorage.setItem('globalLoaderAuth', JSON.stringify(authData));
+} else {
+localStorage.removeItem('globalLoaderAuth');
+}
+}
 
-        const newsItems = [
-            {
-                date: "2025-01-19",
-                title: "Fortnite Tool Updated",
-                content: "New ESP features added, improved performance and stability. Anti-cheat bypass updated for latest game version."
-            },
-            {
-                date: "2025-01-18",
-                title: "Server Maintenance Complete",
-                content: "All systems are now running on upgraded infrastructure with improved security and faster response times."
-            },
-            {
-                date: "2025-01-17",
-                title: "GTA V Menu Beta Released",
-                content: "Beta version of GTA V mod menu is now available for premium users. Report any issues on Discord."
-            }
-        ];
+function clearSavedLogin() {
+localStorage.removeItem('globalLoaderAuth');
+}
 
-        let isAuthenticated = false;
-        let currentUser = null;
+function authenticate() {
+const username = document.getElementById('loginUsername').value;
+const password = document.getElementById('loginPassword').value;
+const licenseKey = document.getElementById('licenseKey').value;
+const remember = document.getElementById('rememberLogin').checked;
 
-        // Security improvement: Basic client-side input sanitization
-        // IMPORTANT: This is NOT a substitute for server-side validation and sanitization.
-        // ALL user input should be validated and sanitized on the server-side as well.
-        function sanitizeInput(input) {
-            const div = document.createElement('div');
-            div.appendChild(document.createTextNode(input));
-            return div.innerHTML;
-        }
+// --- IMPORTANT: This is where you would integrate with a backend server ---
+// For this example, we'll simulate a successful login for any input
+if (username && password && licenseKey) {
+isAuthenticated = true;
+currentUser = { username: username, plan: 'Premium', hwid: 'Verified' }; // Simulate user data
+document.getElementById('username').textContent = currentUser.username;
+document.getElementById('hwid').textContent = currentUser.hwid;
 
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    particle.style.left = Math.random() * 100 + 'vw';
-                    particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px';
-                    particle.style.animationDelay = Math.random() * 8 + 's';
-                    particle.style.animationDuration = (Math.random() * 3 + 8) + 's';
-                    container.appendChild(particle);
-                    
-                    setTimeout(() => {
-                        particle.remove();
-                    }, 11000);
-                }, i * 500);
-            }
-        }
+showSection('dashboard');
+document.getElementById('loginSection').style.display = 'none';
+document.getElementById('userInfo').style.display = 'block';
 
-        function checkSavedLogin() {
-            try {
-                const savedData = localStorage.getItem('globalLoaderAuth');
-                if (savedData) {
-                    const { username, password, licenseKey, rememberMe } = JSON.parse(savedData);
-                    if (rememberMe) {
-                        // For demonstration, auto-authenticate if remembered.
-                        // In a real application, you'd send these credentials (or a token) to a server for re-authentication.
-                        console.log("Attempting auto-login for:", username);
-                        authenticate(username, password, licenseKey, true); // Call authenticate with saved data
-                    }
-                }
-            } catch (e) {
-                console.error("Error loading saved login:", e);
-                localStorage.removeItem('globalLoaderAuth'); // Clear corrupted data
-            }
-        }
+saveLogin(username, password, licenseKey, remember);
+alert("Authentication successful! Welcome to GLOBAL Loader.");
+} else {
+alert("Please enter all credentials (Username, Password, and License Key).");
+}
+}
 
-        function authenticate(savedUsername = null, savedPassword = null, savedLicenseKey = null, isAutoLogin = false) {
-            const usernameInput = document.getElementById('loginUsername');
-            const passwordInput = document.getElementById('loginPassword');
-            const licenseKeyInput = document.getElementById('licenseKey');
-            const rememberLoginCheckbox = document.getElementById('rememberLogin');
+function logout() {
+isAuthenticated = false;
+currentUser = null;
+clearSavedLogin();
+document.getElementById('loginUsername').value = '';
+document.getElementById('loginPassword').value = '';
+document.getElementById('licenseKey').value = '';
+document.getElementById('rememberLogin').checked = false;
 
-            // Sanitize user inputs
-            const username = sanitizeInput(savedUsername || usernameInput.value);
-            const password = sanitizeInput(savedPassword || passwordInput.value); // Passwords should be hashed before sending to server
-            const licenseKey = sanitizeInput(savedLicenseKey || licenseKeyInput.value);
+showSection('loginSection');
+document.getElementById('userInfo').style.display = 'none';
+document.querySelector('.nav-item.active').classList.remove('active');
+document.querySelector('.nav-item').classList.add('active'); // Set dashboard as active initially
+alert("Logged out successfully.");
+}
 
-            // Basic validation for demonstration purposes
-            if (!username || !password || !licenseKey) {
-                alert('Please enter username, password, and license key.');
-                return;
-            }
+function showSection(sectionId) {
+if (!isAuthenticated && sectionId !== 'loginSection') {
+alert("Please authenticate first.");
+return;
+}
 
-            // Simulate authentication (replace with actual server-side authentication)
-            // NEVER store real credentials client-side like this. Use tokens.
-            if (username === 'admin' && password === 'admin123' && licenseKey === 'GLOBAL-DEMO-KEY') {
-                isAuthenticated = true;
-                currentUser = { username: username, status: 'Active', plan: 'Premium', hwid: 'Verified' };
+document.querySelectorAll('.content-section').forEach(section => {
+section.classList.remove('active');
+});
+document.querySelectorAll('.nav-item').forEach(item => {
+item.classList.remove('active');
+});
 
-                if (rememberLoginCheckbox.checked && !isAutoLogin) {
-                    try {
-                        // Store minimal, non-sensitive info if "remember me" is checked.
-                        // In a real app, you'd store a secure, short-lived token, not credentials.
-                        localStorage.setItem('globalLoaderAuth', JSON.stringify({
-                            username: username,
-                            // Do NOT save password in localStorage in a real app!
-                            password: password, // For demo purposes, otherwise remove this line.
-                            licenseKey: licenseKey, // For demo purposes, otherwise remove this line.
-                            rememberMe: true
-                        }));
-                    } catch (e) {
-                        console.error("Error saving login data:", e);
-                    }
-                } else if (!rememberLoginCheckbox.checked && !isAutoLogin) {
-                    // Clear if user explicitly unchecks on login
-                    localStorage.removeItem('globalLoaderAuth');
-                }
-                
-                // Hide login, show dashboard
-                document.getElementById('loginSection').classList.remove('active');
-                document.getElementById('dashboard').classList.add('active');
-                document.getElementById('userInfo').style.display = 'block'; // Show user info
-                updateUserInfo();
-                renderGameTools();
-                renderNewsItems();
-            } else {
-                alert('Authentication failed. Invalid credentials or license key.');
-                if (!isAutoLogin) { // Only clear input fields if it's a manual login attempt
-                    usernameInput.value = '';
-                    passwordInput.value = '';
-                    licenseKeyInput.value = '';
-                }
-            }
-        }
+document.getElementById(sectionId).classList.add('active');
+document.querySelector(`.nav-item[onclick="showSection('${sectionId}')"]`)?.classList.add('active');
+}
 
-        function logout() {
-            isAuthenticated = false;
-            currentUser = null;
-            localStorage.removeItem('globalLoaderAuth'); // Clear remembered login
-            // Redirect to login section
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            document.getElementById('loginSection').classList.add('active');
-            document.getElementById('userInfo').style.display = 'none'; // Hide user info
-            document.getElementById('sidebar').classList.remove('active'); // Collapse sidebar on logout
-            // Clear input fields on logout
-            document.getElementById('loginUsername').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('licenseKey').value = '';
-            document.getElementById('rememberLogin').checked = false;
-        }
+function toggleSetting(element) {
+element.classList.toggle('active');
+// Here you would typically save the setting state to localStorage or send it to a backend
+console.log(`Setting toggled: ${element.previousElementSibling.textContent}, new state: ${element.classList.contains('active')}`);
+}
 
-        function updateUserInfo() {
-            if (currentUser) {
-                document.getElementById('username').textContent = currentUser.username;
-                // Status and Plan are hardcoded in HTML for now, but could be dynamic based on currentUser.
-                // document.querySelector('.user-status .status-active').textContent = currentUser.status;
-                // document.querySelector('.user-status .status-premium').textContent = currentUser.plan;
-                document.getElementById('hwid').textContent = currentUser.hwid;
-            }
-        }
+function renderGameTools() {
+const cheatsGrid = document.getElementById('cheatsGrid');
+cheatsGrid.innerHTML = ''; // Clear previous tools
+gameTools.forEach(tool => {
+const statusClass = `status-${tool.status}`;
+const toolCard = `
+<div class="cheat-card">
+<div class="cheat-header">
+<div class="cheat-title">${tool.name}</div>
+<div class="cheat-status ${statusClass}">${tool.status}</div>
+</div>
+<div class="cheat-description">
+<strong>Game:</strong> ${tool.game}<br>
+${tool.description}
+</div>
+<div class="cheat-actions">
+<button class="btn btn-primary" onclick="launchTool(${tool.id})" ${tool.status === 'detected' ? 'disabled' : ''}>
+${tool.status === 'detected' ? 'Detected' : '🚀 Launch'}
+</button>
+<button class="btn btn-secondary" onclick="checkToolStatus(${tool.id})">
+🔍 Check Status
+</button>
+</div>
+</div>
+`;
+cheatsGrid.innerHTML += toolCard;
+});
+}
 
-        function showSection(sectionId, clickedNavItem = null) {
-            if (!isAuthenticated && sectionId !== 'loginSection') {
-                alert('Please authenticate first.');
-                return;
-            }
+function renderNews() {
+const newsContainer = document.getElementById('newsContainer');
+newsContainer.innerHTML = ''; // Clear previous news
+newsItems.forEach(news => {
+const newsCard = `
+<div class="news-item">
+<div class="news-date">${news.date}</div>
+<div class="news-title">${news.title}</div>
+<p>${news.content}</p>
+</div>
+`;
+newsContainer.innerHTML += newsCard;
+});
+}
 
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
+function checkUpdates() {
+alert("Checking for updates... No new updates available at the moment.");
+}
 
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            if (clickedNavItem) {
-                clickedNavItem.classList.add('active');
-            }
+function launchTool(toolId) {
+const tool = gameTools.find(t => t.id === toolId);
+if (tool) {
+alert(`Launching ${tool.name}... (This would typically involve an external application or process)`);
+}
+}
 
-            // Close mobile menu if open
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-            }
-        }
+function checkToolStatus(toolId) {
+const tool = gameTools.find(t => t.id === toolId);
+if (tool) {
+alert(`${tool.name} Status: ${tool.status.toUpperCase()} (Last Update: ${tool.lastUpdate})`);
+}
+}
 
-        function renderGameTools() {
-            const cheatsGrid = document.getElementById('cheatsGrid');
-            cheatsGrid.innerHTML = ''; // Clear existing
-            gameTools.forEach(tool => {
-                const card = document.createElement('div');
-                card.className = 'cheat-card';
-                let statusClass = '';
-                switch (tool.status) {
-                    case 'undetected': statusClass = 'status-undetected'; break;
-                    case 'detected': statusClass = 'status-detected'; break;
-                    case 'development': statusClass = 'status-development'; break;
-                }
-                card.innerHTML = `
-                    <div class="cheat-header">
-                        <span class="cheat-title">${sanitizeInput(tool.name)}</span>
-                        <span class="cheat-status ${statusClass}">${sanitizeInput(tool.status)}</span>
-                    </div>
-                    <p class="cheat-description">${sanitizeInput(tool.description)}</p>
-                    <div class="user-status" style="margin-bottom: 10px;">
-                        <span>Game:</span>
-                        <span>${sanitizeInput(tool.game)}</span>
-                    </div>
-                    <div class="user-status" style="margin-bottom: 10px;">
-                        <span>Version:</span>
-                        <span>${sanitizeInput(tool.version)}</span>
-                    </div>
-                    <div class="user-status" style="margin-bottom: 18px;">
-                        <span>Last Update:</span>
-                        <span>${sanitizeInput(tool.lastUpdate)}</span>
-                    </div>
-                    <div class="cheat-actions">
-                        <button class="btn btn-primary" ${tool.status === 'detected' ? 'disabled' : ''}>🚀 Launch</button>
-                        <button class="btn btn-secondary">📋 Info</button>
-                    </div>
-                `;
-                cheatsGrid.appendChild(card);
-            });
-        }
+function openDiscord() {
+// Replace with your actual Discord invite link
+window.open('https://discord.gg/yourinvite', '_blank');
+}
 
-        function renderNewsItems() {
-            const newsContainer = document.getElementById('newsContainer');
-            newsContainer.innerHTML = ''; // Clear existing
-            newsItems.forEach(news => {
-                const item = document.createElement('div');
-                item.className = 'news-item';
-                item.innerHTML = `
-                    <p class="news-date">${sanitizeInput(news.date)}</p>
-                    <h3 class="news-title">${sanitizeInput(news.title)}</h3>
-                    <p>${sanitizeInput(news.content)}</p>
-                `;
-                newsContainer.appendChild(item);
-            });
-        }
+// Initial calls
+createParticles();
+checkSavedLogin();
+// If not authenticated (e.g., first visit or after logout), show login
+if (!isAuthenticated) {
+showSection('loginSection');
+} else {
+showSection('dashboard');
+}
+renderGameTools();
+renderNews();
+</script>
 
-        function toggleSetting(element) {
-            element.classList.toggle('active');
-            // Add logic here to save the setting state (e.g., to localStorage or a backend)
-        }
+<script>
+// --- Anti-Inspection and Dev Tools Blocking ---
 
-        function checkUpdates() {
-            alert('Checking for updates... (This is a placeholder)');
-            // In a real app, this would trigger an actual update check.
-        }
+// Disable Right-Click Context Menu
+document.addEventListener('contextmenu', function(e) {
+e.preventDefault();
+console.warn("Right-click inspection is blocked.");
+});
 
-        function openDiscord() {
-            alert('Opening Discord support... (This is a placeholder)');
-            // In a real app, this would open a Discord invite link or client.
-            // window.open('YOUR_DISCORD_INVITE_LINK', '_blank');
-        }
+// Block Common Developer Tool Shortcuts
+document.addEventListener('keydown', function(e) {
+// F12 key (Developer Tools)
+if (e.keyCode === 123) {
+e.preventDefault();
+console.warn("F12 (Developer Tools) is blocked.");
+}
 
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
-        }
+// Ctrl+Shift+I (Developer Tools)
+if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+e.preventDefault();
+console.warn("Ctrl+Shift+I (Developer Tools) is blocked.");
+}
 
-        // Initial setup
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            checkSavedLogin(); // Attempt to auto-login on page load
-            // If not authenticated by checkSavedLogin, the login section will remain active.
-        });
-    </script>
+// Ctrl+Shift+J (Console)
+if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+e.preventDefault();
+console.warn("Ctrl+Shift+J (Console) is blocked.");
+}
+
+// Ctrl+U (View Page Source)
+if (e.ctrlKey && e.keyCode === 85) {
+e.preventDefault();
+console.warn("Ctrl+U (View Page Source) is blocked.");
+}
+
+// Ctrl+S (Save Page)
+if (e.ctrlKey && e.keyCode === 83) {
+e.preventDefault();
+console.warn("Ctrl+S (Save Page) is blocked.");
+}
+
+// Ctrl+P (Print)
+if (e.ctrlKey && e.keyCode === 80) {
+e.preventDefault();
+console.warn("Ctrl+P (Print) is blocked.");
+}
+});
+
+// Basic Console Detection (less reliable, can be bypassed)
+// This attempts to detect when the console might be open by checking dimensions, but it's not foolproof.
+// It's more of a nuisance than a true block.
+const threshold = 160; // Approximate height/width of dev tools
+const devtools = {
+isOpen: false,
+orientation: undefined
+};
+
+const emitEvent = (isOpen, orientation) => {
+window.dispatchEvent(new CustomEvent('devtoolschange', {
+detail: { isOpen, orientation }
+}));
+};
+
+setInterval(() => {
+const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+const orientation = widthThreshold ? 'vertical' : 'horizontal';
+
+if (widthThreshold || heightThreshold) {
+if (!devtools.isOpen || devtools.orientation !== orientation) {
+emitEvent(true, orientation);
+}
+devtools.isOpen = true;
+devtools.orientation = orientation;
+} else {
+if (devtools.isOpen) {
+emitEvent(false, undefined);
+}
+devtools.isOpen = false;
+devtools.orientation = undefined;
+}
+}, 500); // Check every 500ms
+
+// You can add a listener to do something when dev tools are detected
+window.addEventListener('devtoolschange', event => {
+if (event.detail.isOpen) {
+// console.clear(); // Could clear the console to annoy, but also reveals itself
+// debugger; // Can trigger debugger, but user can often bypass
+console.log("%cSTOP!", "font-size: 50px; color: red;");
+console.log("%cDeveloper tools detected. Unauthorized inspection is prohibited.", "font-size: 18px; color: orange;");
+}
+});
+</script>
 </body>
 </html>
