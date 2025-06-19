@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLOBAL Loader - Game Enhancement Tool</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
     <style>
         * {
             margin: 0;
@@ -82,6 +83,8 @@
             display: flex;
             flex-direction: column;
             box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+            position: relative; /* For mobile toggle */
+            z-index: 10;
         }
 
         .logo {
@@ -153,6 +156,8 @@
 
         .nav-menu {
             flex: 1;
+            overflow-y: auto; /* Enable scrolling for nav items */
+            padding-right: 5px; /* Space for scrollbar */
         }
 
         .nav-item {
@@ -235,6 +240,7 @@
             justify-content: space-between;
             align-items: center;
             backdrop-filter: blur(10px);
+            font-size: 0.9rem; /* Adjusted for mobile */
         }
 
         .cheat-grid {
@@ -282,6 +288,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 18px;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            gap: 10px; /* Space between title and status if wrapped */
         }
 
         .cheat-title {
@@ -328,6 +336,7 @@
         .cheat-actions {
             display: flex;
             gap: 12px;
+            flex-wrap: wrap; /* Allow buttons to wrap */
         }
 
         .btn {
@@ -341,6 +350,7 @@
             overflow: hidden;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            flex-grow: 1; /* Allow buttons to grow and fill space */
         }
 
         .btn::before {
@@ -393,6 +403,7 @@
         .settings-grid {
             display: grid;
             gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted for mobile */
         }
 
         .setting-group {
@@ -415,6 +426,7 @@
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95rem; /* Adjusted for mobile */
         }
 
         .setting-item:last-child {
@@ -558,6 +570,116 @@
             font-size: 1.1rem;
         }
 
+        /* Mobile specific styles */
+        .mobile-menu-toggle {
+            display: none; /* Hidden on desktop */
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 191, 255, 0.15);
+            border: 1px solid rgba(0, 191, 255, 0.4);
+            color: #00bfff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 100; /* Ensure it's on top */
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto; /* Allow scrolling on body when sidebar is collapsed */
+            }
+
+            .loader-container {
+                flex-direction: column;
+                height: auto; /* Allow content to dictate height */
+                min-height: 100vh; /* Ensure it takes full viewport height if content is small */
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 60px; /* Initially collapsed height */
+                overflow: hidden;
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+                transition: max-height 0.5s ease-in-out;
+            }
+
+            .sidebar.active {
+                max-height: 500px; /* Expanded height */
+            }
+
+            .sidebar > *:not(.mobile-menu-toggle) {
+                display: none; /* Hide content by default */
+            }
+            .sidebar.active > *:not(.mobile-menu-toggle) {
+                display: flex; /* Show content when active */
+                flex-direction: column;
+            }
+            .sidebar.active .logo,
+            .sidebar.active .user-info,
+            .sidebar.active .nav-menu {
+                display: block; /* Specific elements to show as block */
+            }
+
+            .mobile-menu-toggle {
+                display: block; /* Show on mobile */
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            .logo p {
+                font-size: 0.8rem;
+            }
+
+            .user-info {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .nav-menu {
+                padding-right: 0; /* No scrollbar space on mobile */
+                max-height: 250px; /* Limit nav height on mobile to prevent overflow */
+            }
+
+            .nav-item {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .cheat-grid, .settings-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+            }
+
+            .cheat-card, .setting-group {
+                padding: 20px;
+            }
+            .cheat-title {
+                font-size: 1.1rem;
+            }
+            .cheat-description {
+                font-size: 0.9rem;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                gap: 5px;
+            }
+        }
+
+
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -581,7 +703,8 @@
     <div class="floating-particles" id="particles"></div>
     
     <div class="loader-container">
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
+            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰ Menu</div>
             <div class="logo">
                 <h1>GLOBAL</h1>
                 <p>Game Enhancement Loader</p>
@@ -604,16 +727,16 @@
             </div>
 
             <div class="nav-menu">
-                <div class="nav-item active" onclick="showSection('dashboard')">
+                <div class="nav-item active" onclick="showSection('dashboard', this)">
                     🏠 Dashboard
                 </div>
-                <div class="nav-item" onclick="showSection('cheats')">
+                <div class="nav-item" onclick="showSection('cheats', this)">
                     🎮 Game Tools
                 </div>
-                <div class="nav-item" onclick="showSection('settings')">
+                <div class="nav-item" onclick="showSection('settings', this)">
                     ⚙️ Settings
                 </div>
-                <div class="nav-item" onclick="showSection('news')">
+                <div class="nav-item" onclick="showSection('news', this)">
                     📰 Updates
                 </div>
                 <div class="nav-item" onclick="logout()">
@@ -627,15 +750,15 @@
                 <div class="auth-form">
                     <h2 style="color: #00bfff; margin-bottom: 40px; font-size: 1.8rem;">GLOBAL Loader Authentication</h2>
                     <div class="form-group">
-                        <label>Username</label>
+                        <label for="loginUsername">Username</label>
                         <input type="text" id="loginUsername" placeholder="Enter username">
                     </div>
                     <div class="form-group">
-                        <label>Password</label>
+                        <label for="loginPassword">Password</label>
                         <input type="password" id="loginPassword" placeholder="Enter password">
                     </div>
                     <div class="form-group">
-                        <label>License Key</label>
+                        <label for="licenseKey">License Key</label>
                         <input type="text" id="licenseKey" placeholder="Enter license key">
                     </div>
                     <div class="remember-login">
@@ -677,7 +800,7 @@
                             <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="checkUpdates()">
                                 🔄 Check for Updates
                             </button>
-                            <button class="btn btn-secondary" style="width: 100%; margin-bottom: 12px;" onclick="showSection('cheats')">
+                            <button class="btn btn-secondary" style="width: 100%; margin-bottom: 12px;" onclick="showSection('cheats', this)">
                                 🎮 Launch Tools
                             </button>
                             <button class="btn btn-secondary" style="width: 100%;" onclick="openDiscord()">
@@ -807,6 +930,14 @@
         let isAuthenticated = false;
         let currentUser = null;
 
+        // Security improvement: Basic client-side input sanitization
+        // IMPORTANT: This is NOT a substitute for server-side validation and sanitization.
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(input));
+            return div.innerHTML;
+        }
+
         function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 15; i++) {
@@ -831,10 +962,11 @@
                 const savedData = localStorage.getItem('globalLoaderAuth');
                 if (savedData) {
                     const authData = JSON.parse(savedData);
+                    // Sanitize retrieved data before populating input fields to prevent potential XSS from localStorage
                     if (authData.username && authData.password && authData.licenseKey && authData.remember) {
-                        document.getElementById('loginUsername').value = authData.username;
-                        document.getElementById('loginPassword').value = authData.password;
-                        document.getElementById('licenseKey').value = authData.licenseKey;
+                        document.getElementById('loginUsername').value = sanitizeInput(authData.username);
+                        document.getElementById('loginPassword').value = sanitizeInput(authData.password);
+                        document.getElementById('licenseKey').value = sanitizeInput(authData.licenseKey);
                         document.getElementById('rememberLogin').checked = true;
                     }
                 }
@@ -846,7 +978,13 @@
 
         function saveLogin(username, password, licenseKey, remember) {
             if (remember) {
-                const authData = { username, password, licenseKey, remember };
+                // Sanitize data before saving to localStorage
+                const authData = { 
+                    username: sanitizeInput(username), 
+                    password: sanitizeInput(password), // Passwords should ideally not be stored in localStorage at all
+                    licenseKey: sanitizeInput(licenseKey), 
+                    remember 
+                };
                 localStorage.setItem('globalLoaderAuth', JSON.stringify(authData));
             } else {
                 localStorage.removeItem('globalLoaderAuth');
@@ -863,20 +1001,31 @@
             const licenseKey = document.getElementById('licenseKey').value;
             const remember = document.getElementById('rememberLogin').checked;
 
-            // --- IMPORTANT: This is where you would integrate with a backend server ---
-            // For this example, we'll simulate a successful login for any input
+            // --- IMPORTANT SECURITY NOTICE ---
+            // This client-side authentication is for demonstration purposes ONLY.
+            // In a real application, you MUST integrate with a SECURE BACKEND SERVER
+            // for authentication, password hashing, and user data management.
+            // Storing credentials or performing authentication purely client-side is HIGHLY INSECURE.
+            // For a production system, you would make an AJAX/fetch request to your server here.
+            // --- END SECURITY NOTICE ---
+
             if (username && password && licenseKey) {
                 isAuthenticated = true;
-                currentUser = { username: username, plan: 'Premium', hwid: 'Verified' }; // Simulate user data
+                // Use textContent for displaying data to prevent HTML injection
+                currentUser = { 
+                    username: sanitizeInput(username), 
+                    plan: 'Premium', 
+                    hwid: 'Verified' 
+                }; 
                 document.getElementById('username').textContent = currentUser.username;
                 document.getElementById('hwid').textContent = currentUser.hwid;
                 
-                showSection('dashboard');
+                showSection('dashboard', document.querySelector(`.nav-item[onclick="showSection('dashboard', this)"]`));
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('userInfo').style.display = 'block';
 
                 saveLogin(username, password, licenseKey, remember);
-                alert("Authentication successful! Welcome to GLOBAL Loader.");
+                alert("Authentication successful! Welcome to GLOBAL Loader. (Note: This is a simulated login.)");
             } else {
                 alert("Please enter all credentials (Username, Password, and License Key).");
             }
@@ -891,14 +1040,14 @@
             document.getElementById('licenseKey').value = '';
             document.getElementById('rememberLogin').checked = false;
 
-            showSection('loginSection');
+            showSection('loginSection', document.querySelector(`.nav-item[onclick="showSection('dashboard', this)"]`)); // Default to dashboard nav item for clarity
             document.getElementById('userInfo').style.display = 'none';
-            document.querySelector('.nav-item.active').classList.remove('active');
-            document.querySelector('.nav-item').classList.add('active'); // Set dashboard as active initially
+            // Deactivate all nav items
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             alert("Logged out successfully.");
         }
 
-        function showSection(sectionId) {
+        function showSection(sectionId, clickedElement) {
             if (!isAuthenticated && sectionId !== 'loginSection') {
                 alert("Please authenticate first.");
                 return;
@@ -912,7 +1061,14 @@
             });
 
             document.getElementById(sectionId).classList.add('active');
-            document.querySelector(`.nav-item[onclick="showSection('${sectionId}')"]`)?.classList.add('active');
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+
+            // Close mobile menu after selection
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
         }
 
         function toggleSetting(element) {
@@ -923,174 +1079,77 @@
 
         function renderGameTools() {
             const cheatsGrid = document.getElementById('cheatsGrid');
-            cheatsGrid.innerHTML = ''; // Clear previous tools
+            cheatsGrid.innerHTML = ''; // Clear existing content
+
             gameTools.forEach(tool => {
-                const statusClass = `status-${tool.status}`;
-                const toolCard = `
-                    <div class="cheat-card">
-                        <div class="cheat-header">
-                            <div class="cheat-title">${tool.name}</div>
-                            <div class="cheat-status ${statusClass}">${tool.status}</div>
-                        </div>
-                        <div class="cheat-description">
-                            <strong>Game:</strong> ${tool.game}<br>
-                            ${tool.description}
-                        </div>
-                        <div class="cheat-actions">
-                            <button class="btn btn-primary" onclick="launchTool(${tool.id})" ${tool.status === 'detected' ? 'disabled' : ''}>
-                                ${tool.status === 'detected' ? 'Detected' : '🚀 Launch'}
-                            </button>
-                            <button class="btn btn-secondary" onclick="checkToolStatus(${tool.id})">
-                                🔍 Check Status
-                            </button>
-                        </div>
+                const card = document.createElement('div');
+                card.className = 'cheat-card';
+                
+                // Use textContent for user-provided data, and carefully construct HTML strings
+                // For status, ensure the class names are static and controlled.
+                card.innerHTML = `
+                    <div class="cheat-header">
+                        <span class="cheat-title">${sanitizeInput(tool.name)}</span>
+                        <span class="cheat-status status-${sanitizeInput(tool.status)}">${sanitizeInput(tool.status)}</span>
+                    </div>
+                    <p class="cheat-description">${sanitizeInput(tool.description)}</p>
+                    <div class="cheat-actions">
+                        <button class="btn btn-primary">Launch ${sanitizeInput(tool.game)}</button>
+                        <button class="btn btn-secondary">Details</button>
                     </div>
                 `;
-                cheatsGrid.innerHTML += toolCard;
+                cheatsGrid.appendChild(card);
             });
         }
 
         function renderNews() {
             const newsContainer = document.getElementById('newsContainer');
-            newsContainer.innerHTML = ''; // Clear previous news
+            newsContainer.innerHTML = ''; // Clear existing content
+
             newsItems.forEach(news => {
-                const newsCard = `
-                    <div class="news-item">
-                        <div class="news-date">${news.date}</div>
-                        <div class="news-title">${news.title}</div>
-                        <p>${news.content}</p>
-                    </div>
+                const item = document.createElement('div');
+                item.className = 'news-item';
+                // Use textContent for user-provided data
+                item.innerHTML = `
+                    <div class="news-date">${sanitizeInput(news.date)}</div>
+                    <div class="news-title">${sanitizeInput(news.title)}</div>
+                    <p>${sanitizeInput(news.content)}</p>
                 `;
-                newsContainer.innerHTML += newsCard;
+                newsContainer.appendChild(item);
             });
         }
 
         function checkUpdates() {
-            alert("Checking for updates... No new updates available at the moment.");
-        }
-
-        function launchTool(toolId) {
-            const tool = gameTools.find(t => t.id === toolId);
-            if (tool) {
-                alert(`Launching ${tool.name}... (This would typically involve an external application or process)`);
-            }
-        }
-
-        function checkToolStatus(toolId) {
-            const tool = gameTools.find(t => t.id === toolId);
-            if (tool) {
-                alert(`${tool.name} Status: ${tool.status.toUpperCase()} (Last Update: ${tool.lastUpdate})`);
-            }
+            alert("Checking for updates... (Simulated)");
+            // In a real app, this would fetch updates from your backend
         }
 
         function openDiscord() {
-            // Replace with your actual Discord invite link
-            window.open('https://discord.gg/yourinvite', '_blank');
+            alert("Opening Discord... (Simulated)");
+            window.open('https://discord.gg/yourdiscordinvite', '_blank'); // Replace with actual Discord invite
         }
 
-        // Initial calls
-        createParticles();
-        checkSavedLogin();
-        // If not authenticated (e.g., first visit or after logout), show login
-        if (!isAuthenticated) {
-            showSection('loginSection');
-        } else {
-            showSection('dashboard');
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
         }
-        renderGameTools();
-        renderNews();
-    </script>
 
-    <script>
-        // --- Anti-Inspection and Dev Tools Blocking ---
+        // Initial setup on load
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            checkSavedLogin();
+            renderGameTools();
+            renderNews();
 
-        // Disable Right-Click Context Menu
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            console.warn("Right-click inspection is blocked.");
-        });
-
-        // Block Common Developer Tool Shortcuts
-        document.addEventListener('keydown', function(e) {
-            // F12 key (Developer Tools)
-            if (e.keyCode === 123) {
-                e.preventDefault();
-                console.warn("F12 (Developer Tools) is blocked.");
-            }
-
-            // Ctrl+Shift+I (Developer Tools)
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-                e.preventDefault();
-                console.warn("Ctrl+Shift+I (Developer Tools) is blocked.");
-            }
-
-            // Ctrl+Shift+J (Console)
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-                e.preventDefault();
-                console.warn("Ctrl+Shift+J (Console) is blocked.");
-            }
-
-            // Ctrl+U (View Page Source)
-            if (e.ctrlKey && e.keyCode === 85) {
-                e.preventDefault();
-                console.warn("Ctrl+U (View Page Source) is blocked.");
-            }
-
-            // Ctrl+S (Save Page)
-            if (e.ctrlKey && e.keyCode === 83) {
-                e.preventDefault();
-                console.warn("Ctrl+S (Save Page) is blocked.");
-            }
-
-            // Ctrl+P (Print)
-            if (e.ctrlKey && e.keyCode === 80) {
-                e.preventDefault();
-                console.warn("Ctrl+P (Print) is blocked.");
-            }
-        });
-
-        // Basic Console Detection (less reliable, can be bypassed)
-        // This attempts to detect when the console might be open by checking dimensions, but it's not foolproof.
-        // It's more of a nuisance than a true block.
-        const threshold = 160; // Approximate height/width of dev tools
-        const devtools = {
-            isOpen: false,
-            orientation: undefined
-        };
-
-        const emitEvent = (isOpen, orientation) => {
-            window.dispatchEvent(new CustomEvent('devtoolschange', {
-                detail: { isOpen, orientation }
-            }));
-        };
-
-        setInterval(() => {
-            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-            const orientation = widthThreshold ? 'vertical' : 'horizontal';
-
-            if (widthThreshold || heightThreshold) {
-                if (!devtools.isOpen || devtools.orientation !== orientation) {
-                    emitEvent(true, orientation);
-                }
-                devtools.isOpen = true;
-                devtools.orientation = orientation;
+            // Set initial active nav item for non-login sections
+            if (isAuthenticated) {
+                document.querySelector('.nav-item.active').classList.remove('active');
+                document.querySelector(`.nav-item[onclick="showSection('dashboard', this)"]`).classList.add('active');
             } else {
-                if (devtools.isOpen) {
-                    emitEvent(false, undefined);
-                }
-                devtools.isOpen = false;
-                devtools.orientation = undefined;
-            }
-        }, 500); // Check every 500ms
-
-        // You can add a listener to do something when dev tools are detected
-        window.addEventListener('devtoolschange', event => {
-            if (event.detail.isOpen) {
-                // console.clear(); // Could clear the console to annoy, but also reveals itself
-                // debugger; // Can trigger debugger, but user can often bypass
-                console.log("%cSTOP!", "font-size: 50px; color: red;");
-                console.log("%cDeveloper tools detected. Unauthorized inspection is prohibited.", "font-size: 18px; color: orange;");
+                 // Ensure only login section is active initially if not authenticated
+                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                document.getElementById('loginSection').classList.add('active');
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             }
         });
     </script>
