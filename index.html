@@ -11,7 +11,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/ynwglobal/global-gta5-mod-hub/main/global_logo.png" />
 <meta name="twitter:image" content="https://raw.githubusercontent.com/ynwglobal/global-gta5-mod-hub/main/global_logo.png" />
 
-<!-- Open Graph and Twitter meta tags for embed preview -->
+<!-- ADDED: Open Graph and Twitter meta tags for embed preview -->
 <meta property="og:title" content="GLOBAL is the future of modding." />
 <meta property="og:description" content="Engineered for precision, performance, and power. Once private — now public." />
 <meta property="og:type" content="website" />
@@ -23,6 +23,7 @@
 <meta name="twitter:url" content="https://ynwglobal.github.io/testsite/" />
 
 <style>
+/* Your existing styles here */
 * {
   margin: 0;
   padding: 0;
@@ -213,14 +214,6 @@ footer {
   padding: 2rem 0;
   font-size: 0.9rem;
 }
-footer a {
-  color: #00bfff;
-  cursor: pointer;
-  text-decoration: underline;
-  font-weight: 600;
-  margin-top: 0.5rem;
-  display: inline-block;
-}
 
 /* Bot Features Section */
 .bot-section {
@@ -233,7 +226,6 @@ footer a {
   color: #cceeff;
   line-height: 1.5;
   font-size: 1rem;
-  display: none;
 }
 .bot-section h2 {
   color: #00d9ff;
@@ -293,51 +285,6 @@ footer a {
   box-shadow: 0 0 25px #00bfff;
 }
 
-/* Modal Styles */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  overflow: auto;
-}
-.modal-content {
-  background: #10101a;
-  max-width: 600px;
-  margin: 5% auto;
-  padding: 2rem;
-  border-radius: 8px;
-  color: #ccc;
-  box-shadow: 0 0 20px #00bfff;
-}
-.modal h2 {
-  color: #00bfff;
-  margin-bottom: 1rem;
-}
-.modal ul {
-  margin: 1rem 0;
-  padding-left: 2rem;
-}
-.modal li {
-  margin-bottom: 0.5rem;
-}
-.modal button {
-  margin-top: 1.5rem;
-  padding: 0.6rem 1.2rem;
-  background: #00bfff;
-  border: none;
-  border-radius: 6px;
-  color: #000;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 0 10px #00bfff;
-}
-
 @keyframes fadeIn {
   0% { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -375,6 +322,76 @@ footer a {
   }
 }
 </style>
+<script>
+function showCheats() {
+  const cheats = document.querySelector('.cheats-section');
+  cheats.classList.toggle('active');
+}
+
+function toggleBotFeatures() {
+  const botSection = document.querySelector('.bot-section');
+  const toggleBtn = document.getElementById('toggleBotBtn');
+  
+  botSection.classList.toggle('active');
+  if (botSection.classList.contains('active')) {
+    botSection.style.display = 'block';
+    toggleBtn.textContent = '🚀 Hide Bot Features';
+  } else {
+    botSection.style.display = 'none';
+    toggleBtn.textContent = '🤖 Show Bot Features';
+  }
+}
+
+// Initialize page when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Initially hide the bot features section
+  document.querySelector('.bot-section').style.display = 'none';
+  document.getElementById('toggleBotBtn').textContent = '🤖 Show Bot Features';
+  
+  // Terms of Service modal functionality
+  const tosLink = document.getElementById('tosLink');
+  const tosModal = document.getElementById('tosModal');
+  const closeTosBtn = document.getElementById('closeTosBtn');
+
+  if (tosLink && tosModal && closeTosBtn) {
+    tosLink.addEventListener('click', function(e){
+      e.preventDefault();
+      tosModal.style.display = 'block';
+    });
+    
+    closeTosBtn.addEventListener('click', function(){
+      tosModal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e){
+      if (e.target === tosModal) {
+        tosModal.style.display = 'none';
+      }
+    });
+  }
+});
+
+// Anti-dev tools protections
+window.addEventListener('contextmenu', function(e){
+  e.preventDefault(); // block right-click menu
+});
+
+window.addEventListener('keydown', function(e){
+  // Block F12
+  if(e.key === 'F12'){
+    e.preventDefault();
+  }
+  // Block Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())){
+    e.preventDefault();
+  }
+  // Block Ctrl+U (view source)
+  if(e.ctrlKey && e.key.toUpperCase() === 'U'){
+    e.preventDefault();
+  }
+});
+</script>
 </head>
 <body>
 <header>
@@ -398,13 +415,13 @@ footer a {
   <h1>Next-Gen Game Enhancements</h1>
   <p>GLOBAL is built for elite modding. Stealthy. Powerful. Custom. Join the new era of domination.</p>
   <a class="btn" href="https://discord.gg/SJP5F6hkU5" target="_blank">Join Discord</a>
-  <button class="btn" onclick="showCheats()">Get Started</button>
+  <a class="btn" href="#" onclick="showCheats()">Get Started</a>
 
   <!-- Bot features toggle button -->
   <button id="toggleBotBtn" onclick="toggleBotFeatures()">🤖 Show Bot Features</button>
 </section>
 
-<section class="bot-section container" id="botSection">
+<section class="bot-section container">
   <h2>🤖 Bot Features Overview</h2>
   <p>
     Boost your server with a powerful, all-in-one Discord bot packed with community tools, Fortnite integration, moderation utilities, and smart security features — all wrapped in a sleek, reliable system.
@@ -451,20 +468,21 @@ footer a {
   </ul>
 
   <p style="color:#ffcc00; font-weight: 600; margin-top:1rem;">
-    ⚠️ <strong>Note:</strong> This bot must be used within the server to prevent abuse — unless explicitly approved by the developer.
+    ⚠️ <strong>Note:</strong>This bot must be used within the server to prevent abuse — unless explicitly approved by the developer.
   </p>
 </section>
 
-<section class="cheats-section container" id="cheatsSection">
-  <div class="alert-message">
-    ⚠️ Join our <a href="https://discord.gg/SJP5F6hkU5" target="_blank" style="color: #ffcc00; text-decoration: underline;">Discord</a> to access any of our Tools.
+<section class="cheats-section container">
+  <div class="alert-message" id="discord-alert">
+    ⚠️ Join our <a href="https://discord.gg/SJP5F6hkU5" target="_blank" style="color: #ffcc00; text-decoration: underline;">Discord</a> to access the any of our Tools.
   </div>
   <h2>Cheats</h2>
   <div class="cheat-item">GTA V — <strong>🛠 In Development</strong><span>Full GLOBAL Mod Menu</span></div>
   <div class="cheat-item">Warzone — <strong>🛠 In Development</strong><span>GLOBAL Exploit Console</span></div>
   <div class="cheat-item">Fortnite — <strong>🛠 In Development</strong><span>Fortnite (External) — In development. PC only. Undetected. Advanced features coming soon.</span></div>
+
   <div class="cheat-item">RDR2 / Others — <strong>🛠 Coming Soon</strong><span>Stay Tuned for Updates</span></div>
-  <div class="cheat-item">FiveM (NOT LUA) — <strong>🛠 Coming Soon</strong><span>Full Global menu + spoofer</span></div>
+  <div class="cheat-item">Five M (NOT LUA) — <strong>🛠 Coming Soon</strong><span>Full Global menu + spoofer</span></div>
   <div class="cheat-item">Minecraft — <strong>🛠 In Development</strong><span>Enhanced Modding Tools</span></div>
 </section>
 
@@ -475,7 +493,7 @@ footer a {
   <p class="question">Q: How do I get access?</p>
   <p>A: Join our Discord and follow the steps to verify and gain instant access.</p>
   <p class="question">Q: What platforms are supported?</p>
-  <p>A: PC support will be available for all select titles.</p>
+  <p>A: PC support will only available for all select titles.</p>
 </section>
 
 <section class="about container">
@@ -483,7 +501,7 @@ footer a {
   <p>GLOBAL is the future of modding. Engineered for precision, performance, and power. Once private — now public.</p>
   <ul>
     <li>⚡ Real-time cheat toggles</li>
-    <li>⚡ Controller compatibility</li>
+    <li>⚡ Controller - compatibility</li>
     <li>⚡ Frequent updates</li>
     <li>⚡ User-friendly interface</li>
   </ul>
@@ -491,15 +509,15 @@ footer a {
 </section>
 
 <footer>
-  &copy; 2025 Global Mod Team. Not affiliated with Rockstar Games - built for domination.
+  &copy; 2025 Global Mod Team. Not affiliated with Rockstar Games built for domination.
   <br />
-  <a href="#" id="tosLink">Terms of Service</a>
+  <a href="#" id="tosLink" style="color: #00bfff; cursor: pointer; text-decoration: underline; font-weight: 600; margin-top: 0.5rem; display: inline-block;">Terms of Service</a>
 </footer>
 
 <!-- Terms of Service Modal -->
-<div id="tosModal" class="modal">
-  <div class="modal-content">
-    <h2>Terms of Service</h2>
+<div id="tosModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index:9999; overflow:auto;">
+  <div style="background:#10101a; max-width:600px; margin:5% auto; padding:2rem; border-radius:8px; color:#ccc; box-shadow:0 0 20px #00bfff;">
+    <h2 style="color:#00bfff; margin-bottom:1rem;">Terms of Service</h2>
     <p>Welcome to GLOBAL. By using our site and services, you agree to the following terms:</p>
     <ul>
       <li>You acknowledge that the software and tools provided are for educational and personal use only.</li>
@@ -509,75 +527,8 @@ footer a {
       <li>All rights reserved. Respect copyrights and intellectual property.</li>
     </ul>
     <p style="margin-top:1rem;">Please contact support for any questions or clarifications.</p>
-    <button id="closeTosBtn">Close</button>
+    <button id="closeTosBtn" style="margin-top:1.5rem; padding:0.6rem 1.2rem; background:#00bfff; border:none; border-radius:6px; color:#000; font-weight:700; cursor:pointer; box-shadow:0 0 10px #00bfff;">Close</button>
   </div>
 </div>
-
-<script>
-function showCheats() {
-  const cheats = document.getElementById('cheatsSection');
-  cheats.classList.toggle('active');
-}
-
-function toggleBotFeatures() {
-  const botSection = document.getElementById('botSection');
-  const toggleBtn = document.getElementById('toggleBotBtn');
-  
-  if (botSection.style.display === 'none' || botSection.style.display === '') {
-    botSection.style.display = 'block';
-    toggleBtn.textContent = '🚀 Hide Bot Features';
-  } else {
-    botSection.style.display = 'none';
-    toggleBtn.textContent = '🤖 Show Bot Features';
-  }
-}
-
-// Initialize the page
-document.addEventListener('DOMContentLoaded', function() {
-  // Initially hide the bot features section
-  document.getElementById('botSection').style.display = 'none';
-  
-  // Terms of Service modal functionality
-  const tosLink = document.getElementById('tosLink');
-  const tosModal = document.getElementById('tosModal');
-  const closeTosBtn = document.getElementById('closeTosBtn');
-
-  tosLink.addEventListener('click', function(e){
-    e.preventDefault();
-    tosModal.style.display = 'block';
-  });
-  
-  closeTosBtn.addEventListener('click', function(){
-    tosModal.style.display = 'none';
-  });
-  
-  // Close modal when clicking outside
-  tosModal.addEventListener('click', function(e){
-    if (e.target === tosModal) {
-      tosModal.style.display = 'none';
-    }
-  });
-});
-
-// Anti-dev tools protections
-document.addEventListener('contextmenu', function(e){
-  e.preventDefault();
-});
-
-document.addEventListener('keydown', function(e){
-  // Block F12
-  if(e.key === 'F12'){
-    e.preventDefault();
-  }
-  // Block Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())){
-    e.preventDefault();
-  }
-  // Block Ctrl+U (view source)
-  if(e.ctrlKey && e.key.toUpperCase() === 'U'){
-    e.preventDefault();
-  }
-});
-</script>
 </body>
 </html>
